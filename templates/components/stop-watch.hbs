@@ -1,11 +1,13 @@
-<div {{bind-attr id='stopWatchId'}} class="stopwatch">
-    <p>{{time}}</p>
-    <p>{{startnummer}}</p>
-       <p> {{input type='text' value=startnummer}}</p>
-    {{#each flap in flaps}}
-        <li>{{flap.startnummer}}: {{flap.laptime}}</li>
-    {{/each}}
-    <button {{action 'start'}}>Start</button>
-    <button {{action 'stop'}}>Stop</button>
-    <button {{action 'lap'}}>#{{startnummer}}</button>
+<div {{bind-attr id='stopWatchId'}} class="panel panel-default">
+    <div class="panel-heading">Startnummer: {{input type='text' value=startnummer}}</div>
+    <div class="panel-body">
+        <p>{{time}}</p>
+        {{#each flap in flaps}}
+            <li>{{flap.startnummer}}: {{flap.runde}} - {{flap.laptime}}</li>
+        {{/each}}
+
+        <button {{action 'start'}}>Start</button>
+        <button {{action 'stop'}}>Stop</button>
+        <button {{action 'lap'}}>#{{startnummer}}</button>
+    </div>
 </div>

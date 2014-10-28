@@ -8,6 +8,7 @@ App.ApplicationAdapter = DS.RESTAdapter.extend({
 
 App.Lap = DS.Model.extend({
     startnummer: DS.attr(),
+    runde: DS.attr(),
     laptime: DS.attr(),
     date: DS.attr('string')
 });

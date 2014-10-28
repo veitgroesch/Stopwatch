@@ -5,10 +5,18 @@
         <li>
             {{startnummer}}: {{laptime}}
             <button {{action "delete" this}}>Löschen</button>
-        </button>
+            </button>
         </li>
     {{/each}}
 </ul>
+
+{{#each groupedResults}}
+    <h1>{{startnummer}} <button {{action "deleteStartnummer" this}}>Löschen</button></h1>
+    {{#each contents}}
+        <!-- assuming it has a name -->
+        {{runde}}: {{laptime}} <br>
+    {{/each}}
+{{/each}}
 </div>
 
 </div>

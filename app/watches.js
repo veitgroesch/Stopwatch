@@ -9,6 +9,7 @@ App.WatchesController = Ember.ArrayController.extend({
         saveNewRecord: function (newLap) {
             var newLapData = this.store.createRecord('lap');
             newLapData.set('startnummer', newLap.startnummer);
+            newLapData.set('runde', newLap.runde);
             newLapData.set('laptime', newLap.laptime);
             newLapData.set('date', newLap.date);
             newLapData.save();

@@ -44,7 +44,8 @@ app.use(bodyParser.urlencoded({
 
 app.post('/api/laps', function (req, res) {
     var data = req.body;
-    var sql = "INSERT INTO laps (startnummer, laptime, date) VALUES ('" + data.lap.startnummer +
+    var sql = "INSERT INTO laps (startnummer, runde, laptime, date) VALUES ('" + data.lap.startnummer +
+        "', '" + data.lap.runde +
         "', '" + data.lap.laptime +
         "', '" + data.lap.date + "')";
     connection.query(sql,
