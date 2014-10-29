@@ -55,9 +55,7 @@ App.LapsController = Ember.ArrayController.extend({
         deleteStartnummer: function (item) {
             if (item) {
                 var startnummer = item.get('startnummer');
-                console.log("deleteStartnummer ", startnummer);
                 var toDelete = this.filterBy('startnummer', startnummer);
-                console.log("toDelete ", toDelete);
                 toDelete.forEach(function (rec) {
                     Ember.run.once(this, function () {
                         rec.deleteRecord();
