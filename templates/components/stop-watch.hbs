@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="stopwatch-lapbutton">
-                    <button class="btn btn-primary" {{action 'lap'}}>{{startnummer}}</button>
+                    <button {{bind-attr disabled="lapButtonDisabled"}} class="btn btn-primary" {{action 'lap'}}>{{startnummer}}</button>
                 </div>
             </div>
             <div class="col-md-4">
