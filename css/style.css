@@ -1,19 +1,53 @@
 /* Put your CSS here */
 .ember-application {
-    margin: 20px;
+    margin: 0 40px;
 }
-.panel-heading input{
-    padding:0 3px;
+
+.red {
+    color: red;
+}
+
+/* Übersichtsseite */
+
+.lapTable tbody {
+    font-size: 16px;
+    color: #31708f;
+}
+
+.lapTable thead {
+    font-size: 18px;
+    color: #31708f;
+}
+
+.lapTable td:nth-of-type(2) {
+    color: darkred;
+}
+
+.lapTable td:nth-of-type(1) {
+    color: darkred;
+    font-size: 20px;
+}
+
+/* Stopwatch */
+.panel-heading input {
+    padding: 0 3px;
     margin: 0 5px;
     width: 120px;
 }
+
 .panel-heading {
     font-size: 16px;
     color: #31708f !important;
+    padding: 5px 15px !important;
 }
 
-.stopwatch-panel {
-    /*height: 250px;*/
+.stopwatch-panel .panel-body{
+    margin: 0;
+    padding: 5px 0;
+}
+
+.stopwatch-panel .row{
+    margin: 0;
 }
 
 .stopwatch-buttons button {
@@ -34,17 +68,16 @@
 }
 
 .stopwatch-laptimes {
-    width:100px;
-    padding-right: 5px;
-    overflow: auto;
-    height: 200px;
-    color: #31708f
+    /*width: 85px;*/
+    height: 210px;
+    color: #31708f;
+    margin: 0 !important;
 }
 
-.stopwatch-lapbutton button{
+.stopwatch-lapbutton button {
     width: 100%;
-    height: 120px;
-    font-size: 40px;
+    height: 135px;
+    font-size: 80px;
 }
 
 .lapList {

@@ -3,6 +3,9 @@ App.StopWatchComponent = Ember.Component.extend({
     laps: [],
     runde: 0,
     lapschanged: false,
+    ready: true,
+    setzrunde: 0,
+    sumDelta: 0,
 
     running: false,
     notRunning: function () {
@@ -24,7 +27,7 @@ App.StopWatchComponent = Ember.Component.extend({
     }.property('mayStart'),
 
     lapButtonDisabled: function () {
-        if (!this.get('running')) {
+        if (!this.get('running') || this.get('ready')) {
             return true;
         }
         if (this.get('flaps').length === 0){
@@ -49,25 +52,33 @@ App.StopWatchComponent = Ember.Component.extend({
     actions: {
         start: function () {
             this.set('running', true);
+            this.set('ready', false);
             Ember.run.later(this, function () {
                 this.send('loop');
-            }, 1000);
+            }, 100);
         },
         loop: function () {
             if (this.get('running')) {
-                this.set('time', this.get('time') + 1);
+                var time = Math.round(this.get('time')*10 + 1);
+                time = time / 10;
+                this.set('time', time);
                 Ember.run.later(this, function () {
                     this.send('loop');
-                }, 1000);
+                }, 100);
             }
         },
-        pause: function () {
+        stop: function () {
             this.set('running', false);
         },
         new: function () {
             this.set('runde', 0);
+            this.set('time', 0);
+            this.set('sumDelta', 0);
+            this.set('setzrunde', 0);
+            this.set('running', false);
             this.set('startnummer', '');
             this.set('laps', []);
+            this.set('ready', false);
         },
         back: function () {
             var runde = this.get('runde');
@@ -97,18 +108,38 @@ App.StopWatchComponent = Ember.Component.extend({
         },
         lap: function () {
             var date = new Date();
-            this.set('runde', this.get('runde') + 1);
+            var isSetzrunde = false;
+            var sumDelta = 0;
+            var delta;
+            if (this.get('runde') === 0) {
+                isSetzrunde = true;
+                this.set('setzrunde', this.get('time'));
+                delta = 0;
+            } else {
+                delta =  this.get('time') - this.get('setzrunde');
+                delta = Math.round(delta * 10)/10;
+                sumDelta = this.get('sumDelta') + Math.abs(delta);
+                sumDelta = Math.round(sumDelta * 10) / 10;
+                this.set('sumDelta', sumDelta);
+            }
             var newLap =
             {
                 'startnummer': this.get('startnummer'),
                 'laptime': this.get('time'),
                 'runde': this.get('runde'),
+                'setzrunde': isSetzrunde,
+                'meanDelta': false,
+                'delta': delta,
+                'sumDelta': sumDelta,
                 'date': date
             };
             this.get('laps').pushObject(newLap);
             var newLapStr = JSON.stringify(newLap);
             this.sendAction('saveNewRecord', newLap);
-
+            if (this.get('runde') === 4) {
+                this.set('ready', true);
+            }
+            this.set('runde', this.get('runde') + 1);
             this.set('time', 0);
         }
     }

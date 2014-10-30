@@ -13,11 +13,10 @@ App.LapsController = Ember.ArrayController.extend({
 
     groupedResults: function () {
         var result = [];
-
         this.get('filteredContent').forEach(function (item) {
             var startnummer = item.get('startnummer');
             var hasType = !!result.findBy('startnummer', startnummer);
-
+            var laptime = item.get('laptime');
             if (!hasType) {
                 result.pushObject(Ember.Object.create({
                     startnummer: startnummer,
@@ -38,9 +37,27 @@ App.LapsController = Ember.ArrayController.extend({
         return laps.filter(function (lap) {
             return lap.get('startnummer').match(rx);
         });
-    }.property('arrangedContent', 'filtersn', 'content.length'),
+    }.        property('arrangedContent', 'filtersn', 'content.length'),
 
     actions: {
+        createCSV: function () {
+            var data = [];
+            this.get('arrangedContent').forEach(
+                function (item) {
+                    var obj = {
+                        'startnummer': item.get('startnummer'),
+                        'runde': item.get('runde'),
+                        'laptime': item.get('laptime'),
+                        'delta': item.get('delta'),
+                        'setzrunde': item.get('setzrunde'),
+                        'meanDelta': item.get('meanDelta')
+                    };
+                    data.push(obj);
+                }
+            );
+            console.log(data);
+            App.get('utils').createCSV(data, 'Classic Motor Days 2015', true);
+        },
         sortBy: function (property) {
             this.set('sortProperties', [property]);
             this.set('sortAscending', !this.get('sortAscending'));
@@ -65,7 +82,8 @@ App.LapsController = Ember.ArrayController.extend({
             }
         }
     }
-});
+})
+;
 
 App.LapsRoute = Ember.Route.extend({
     model: function () {

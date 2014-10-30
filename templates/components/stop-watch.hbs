@@ -2,9 +2,9 @@
     <div class="panel-heading">Startnummer: {{input type='text' placeholder="Startnummer" value=startnummer}}</div>
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-8 col-sm-8 col-xs-8">
                 <div class="stopwatch-buttons">
-                    <button {{bind-attr disabled="notRunning"}} class="btn btn-danger btn-sm" {{action 'pause'}}>Pause
+                    <button {{bind-attr disabled="notRunning"}} class="btn btn-danger btn-sm" {{action 'stop'}}>Stopp
                     </button>
                     <button {{bind-attr disabled="running"}} class="btn btn-danger btn-sm" {{action 'new'}}>Neu</button>
                     <button {{bind-attr disabled="notRunning"}} class="btn btn-warning btn-sm" {{action 'back'}}>
@@ -33,7 +33,7 @@
                     <button {{bind-attr disabled="lapButtonDisabled"}} class="btn btn-primary" {{action 'lap'}}>{{startnummer}}</button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-4 col-xs-4">
                 <div class="stopwatch-laptimes panel panel-default">
                     <ul class="lapList">
                     {{#each flap in flaps}}

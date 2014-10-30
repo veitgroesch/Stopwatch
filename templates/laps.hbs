@@ -1,22 +1,47 @@
 <h1>Übersicht</h1>
-{{input type='text' value=filtersn}}
-<ul>
-    {{#each filteredContent}}
-        <li>
-            {{startnummer}}: {{laptime}}
-            <button {{action "delete" this}}>Löschen</button>
-            </button>
-        </li>
-    {{/each}}
-</ul>
+{{input type='text' placeholder='Startnummer filtern' value=filtersn}}
 
-{{#each groupedResults}}
-    <h1>{{startnummer}} <button {{action "deleteStartnummer" this}}>Löschen</button></h1>
-    {{#each contents}}
-        <!-- assuming it has a name -->
-        {{runde}}: {{laptime}} <br>
+<table class="table table-striped table-hover lapTable">
+    <thead>
+    <tr>
+        <th>Startnummer</th>
+        <th>Setzrunde</th>
+        <th>Runde 1</th>
+        <th>Runde 2</th>
+        <th>Runde 3</th>
+        <th>Runde 4</th>
+        <th>Abweichung</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each groupedResults}}
+        <tr>
+            <td class="startnummer">{{startnummer}}</td>
+            {{#each contents}}
+                {{#if setzrunde}}
+                    <td>{{laptime}} s
+                        <!--&NonBreakingSpace;&NonBreakingSpace;-->
+                        <!--<span {{!action "delete" this}} class="glyphicon glyphicon-remove red"></span>-->
+                    </td>
+                {{else}}
+                    {{#if meanDelta}}
+                        <td>&#916;-Mittelwert = {{delta}} s</td>
+                    {{else}}
+                        <td>{{laptime}} s (&#916; = {{delta}} s)
+                            <!--&NonBreakingSpace;&NonBreakingSpace;-->
+                            <!--<span {{!action "delete" this}} class="glyphicon glyphicon-remove red"></span>-->
+                        </td>
+                    {{/if}}
+                {{/if}}
+            {{/each}}
+            <td>
+                <button class="btn btn-danger btn-sm" {{action "deleteStartnummer" this}}>Löschen</button>
+            </td>
+        </tr>
     {{/each}}
-{{/each}}
-</div>
+    </tbody>
+</table>
 
-</div>
+<button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
+
+
