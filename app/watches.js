@@ -12,7 +12,7 @@ App.WatchesRoute = Ember.Route.extend({
                 });
             }
             this.controller.set('dataDeleted', false);
-        },
+        }
     }
 });
 
@@ -22,6 +22,7 @@ App.WatchesController = Ember.ArrayController.extend({
         saveNewRecord: function (newLap) {
             var newLapData = this.store.createRecord('lap');
             newLapData.set('startnummer', newLap.startnummer);
+            newLapData.set('token', newLap.token);
             newLapData.set('runde', newLap.runde);
             newLapData.set('laptime', newLap.laptime);
             newLapData.set('setzrunde', newLap.setzrunde);
@@ -32,7 +33,6 @@ App.WatchesController = Ember.ArrayController.extend({
             newLapData.save();
         },
         delete: function (rec) {
-
             console.log('delete ', rec);
             var content = this.get('content');
             console.log('content ', content);

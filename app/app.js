@@ -83,6 +83,7 @@ App.ApplicationAdapter = DS.RESTAdapter.extend({
 
 App.Lap = DS.Model.extend({
     startnummer: DS.attr(),
+    token: DS.attr(),
     runde: DS.attr(),
     laptime: DS.attr(),
     setzrunde: DS.attr(),

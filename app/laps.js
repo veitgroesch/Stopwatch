@@ -37,7 +37,7 @@ App.LapsController = Ember.ArrayController.extend({
         return laps.filter(function (lap) {
             return lap.get('startnummer').match(rx);
         });
-    }.        property('arrangedContent', 'filtersn', 'content.length'),
+    }.property('arrangedContent', 'filtersn', 'content.length'),
 
     actions: {
         createCSV: function () {
@@ -48,9 +48,7 @@ App.LapsController = Ember.ArrayController.extend({
                         'startnummer': item.get('startnummer'),
                         'runde': item.get('runde'),
                         'laptime': item.get('laptime'),
-                        'delta': item.get('delta'),
-                        'setzrunde': item.get('setzrunde'),
-                        'meanDelta': item.get('meanDelta')
+                        'delta': item.get('delta')
                     };
                     data.push(obj);
                 }
@@ -71,6 +69,9 @@ App.LapsController = Ember.ArrayController.extend({
         },
         deleteStartnummer: function (item) {
             if (item) {
+                if (!confirm('Möchten Sie diesen Datensatz wirklich löschen?')) {
+                    return;
+                }
                 var startnummer = item.get('startnummer');
                 var toDelete = this.filterBy('startnummer', startnummer);
                 toDelete.forEach(function (rec) {

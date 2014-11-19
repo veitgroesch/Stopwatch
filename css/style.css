@@ -1,6 +1,6 @@
 /* Put your CSS here */
 .ember-application {
-    margin: 0 40px;
+    margin: 0 10px;
 }
 
 .red {
@@ -25,10 +25,35 @@
 
 .lapTable td:nth-of-type(1) {
     color: darkred;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 /* Stopwatch */
+
+.background-red {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+.background-green {
+    background-color: #5cb85c;
+    color: #fff;
+}
+
+.panel {
+    margin-bottom: 5px;
+}
+
+.col-buttons {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+.col-laps {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
 .panel-heading input {
     padding: 0 3px;
     margin: 0 5px;
@@ -89,3 +114,4 @@
     color: darkred;
     font-weight: 800;
 }
+

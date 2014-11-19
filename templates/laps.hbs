@@ -19,17 +19,15 @@
             <td class="startnummer">{{startnummer}}</td>
             {{#each contents}}
                 {{#if setzrunde}}
-                    <td>{{laptime}} s
-                        <!--&NonBreakingSpace;&NonBreakingSpace;-->
-                        <!--<span {{!action "delete" this}} class="glyphicon glyphicon-remove red"></span>-->
+                    <td>
+                        {{laptime}} s
                     </td>
                 {{else}}
                     {{#if meanDelta}}
                         <td>&#916;-Mittelwert = {{delta}} s</td>
                     {{else}}
-                        <td>{{laptime}} s (&#916; = {{delta}} s)
-                            <!--&NonBreakingSpace;&NonBreakingSpace;-->
-                            <!--<span {{!action "delete" this}} class="glyphicon glyphicon-remove red"></span>-->
+                        <td>
+                            {{laptime}} s (&#916; = {{delta}} s)
                         </td>
                     {{/if}}
                 {{/if}}

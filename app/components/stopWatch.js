@@ -2,12 +2,17 @@ App.StopWatchComponent = Ember.Component.extend({
     time: 0,
     laps: [],
     runde: 0,
+
+    //TODO use this.notifyPropertyChange(key) instead
     lapschanged: false,
     ready: true,
     setzrunde: 0,
     sumDelta: 0,
 
+    token: '',
+
     running: false,
+
     notRunning: function () {
         return !this.get('running');
     }.property('running'),
@@ -20,11 +25,24 @@ App.StopWatchComponent = Ember.Component.extend({
     }.property('startnummerEingegeben'),
 
     mayStart: function () {
-        return !this.get('running') && this.get('startnummer') !== '';
-    }.property('running', 'startnummer'),
+        return !this.get('running') && this.get('startnummer') !== '' && this.get('runde') === 0;
+    }.property('running', 'startnummer', 'runde'),
+
     notMayStart: function () {
         return !this.get('mayStart');
     }.property('mayStart'),
+
+    lapButtonBackground: function() {
+        if(this.get('lapButtonDisabled')) {
+            return 'background-red';
+        } else {
+            return 'background-green';
+        }
+    }.property('lapButtonDisabled'),
+
+    backDisabled: function() {
+        return this.get('runde') !== 1;
+    }.property('runde'),
 
     lapButtonDisabled: function () {
         if (!this.get('running') || this.get('ready')) {
@@ -53,6 +71,8 @@ App.StopWatchComponent = Ember.Component.extend({
         start: function () {
             this.set('running', true);
             this.set('ready', false);
+            this.set('token', Date());
+            console.log('token; ', this.get('token'));
             Ember.run.later(this, function () {
                 this.send('loop');
             }, 100);
@@ -82,29 +102,21 @@ App.StopWatchComponent = Ember.Component.extend({
         },
         back: function () {
             var runde = this.get('runde');
-            if (runde < 2) return;
+            if (runde !== 1) return;
             var flaps = this.get('flaps');
             var laps = this.get('laps');
-            var lastLap = flaps[runde - 1];
-            var lastLap2 = flaps[runde - 2];
-            var index2 = laps.indexOf(lastLap2);
+            var wertung = flaps[0];
+            var index = laps.indexOf(wertung);
             Ember.run.once(this, function () {
-                this.sendAction('delete', lastLap);
+                this.sendAction('delete', wertung);
             });
-            Ember.run.once(this, function () {
-                this.sendAction('delete', lastLap2);
-            });
-            lastLap2.laptime = lastLap2.laptime + lastLap.laptime;
-            var index1 = laps.indexOf(lastLap);
-            if (index1 > -1) {
-                laps.splice(index1, 1);
-            }
-            this.set('runde', this.get('runde') - 1);
+            wertung.laptime = Math.round((wertung.laptime + this.get('time')) * 10) / 10;
+            this.set('time' ,0);
             this.set('lapschanged', true);
             Ember.run.once(this, function () {
-                this.sendAction('saveNewRecord', lastLap2);
+                this.sendAction('saveNewRecord', wertung);
             });
-
+            this.set('ready', false);
         },
         lap: function () {
             var date = new Date();
@@ -125,6 +137,7 @@ App.StopWatchComponent = Ember.Component.extend({
             var newLap =
             {
                 'startnummer': this.get('startnummer'),
+                'token': this.get('token'),
                 'laptime': this.get('time'),
                 'runde': this.get('runde'),
                 'setzrunde': isSetzrunde,
@@ -138,7 +151,10 @@ App.StopWatchComponent = Ember.Component.extend({
             this.sendAction('saveNewRecord', newLap);
             if (this.get('runde') === 4) {
                 this.set('ready', true);
+                this.set('running', false);
+                return;
             }
+
             this.set('runde', this.get('runde') + 1);
             this.set('time', 0);
         }
