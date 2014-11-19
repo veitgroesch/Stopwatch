@@ -48,8 +48,9 @@ app.post('/api/laps', function (req, res) {
     var meanDelta = data.lap.meanDelta ? 1 : 0;
     var sumDelta = data.lap.sumDelta;
 
-    var sql = "INSERT INTO laps (startnummer, runde, laptime, setzrunde, meanDelta, delta, sumDelta, date) VALUES ('" +
+    var sql = "INSERT INTO laps (startnummer, token, runde, laptime, setzrunde, meanDelta, delta, sumDelta, date) VALUES ('" +
         data.lap.startnummer +
+        "', '" + data.lap.token +
         "', '" + data.lap.runde +
         "', '" + data.lap.laptime +
         "', '" + setzrunde +
@@ -72,8 +73,9 @@ app.post('/api/laps', function (req, res) {
     // deltas berechnen
     if (data.lap.runde === 4) {
         var deltaM = Math.round(sumDelta / 4 * 100) / 100;
-        var sql = "INSERT INTO laps (startnummer, runde, laptime, setzrunde, meanDelta, delta, sumDelta, date) VALUES ('" +
+        var sql = "INSERT INTO laps (startnummer, token, runde, laptime, setzrunde, meanDelta, delta, sumDelta, date) VALUES ('" +
             data.lap.startnummer +
+            "', '" + data.lap.token +
             "', '" + 5 +
             "', '" + 0 +
             "', '" + 0 +

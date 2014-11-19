@@ -63,8 +63,9 @@ App.StopWatchComponent = Ember.Component.extend({
     flaps: function () {
         this.set('lapschanged', false);
         var startnummer = this.get('startnummer');
+        var token = this.get('token');
         return this.get('laps').filter(function (lap) {
-            return lap.startnummer == startnummer;
+            return lap.startnummer == startnummer && lap.token == token;
         });
     }.property('laps.length', 'startnummer', 'lapschanged'),
     actions: {

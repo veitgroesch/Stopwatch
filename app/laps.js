@@ -14,20 +14,39 @@ App.LapsController = Ember.ArrayController.extend({
     groupedResults: function () {
         var result = [];
         this.get('filteredContent').forEach(function (item) {
+            var token = item.get('token');
             var startnummer = item.get('startnummer');
-            var hasType = !!result.findBy('startnummer', startnummer);
+            var hasType = !!result.findBy('token', token);
             var laptime = item.get('laptime');
             if (!hasType) {
                 result.pushObject(Ember.Object.create({
+                    token: token,
                     startnummer: startnummer,
                     contents: []
                 }));
             }
-            result.findBy('startnummer', startnummer).get('contents').pushObject(item);
+            result.findBy('token', token).get('contents').pushObject(item);
         });
 
         return result;
     }.property('filteredContent.[]', 'content.length'),
+//    groupedResults: function () {
+//        var result = [];
+//        this.get('filteredContent').forEach(function (item) {
+//            var startnummer = item.get('startnummer');
+//            var hasType = !!result.findBy('startnummer', startnummer);
+//            var laptime = item.get('laptime');
+//            if (!hasType) {
+//                result.pushObject(Ember.Object.create({
+//                    startnummer: startnummer,
+//                    contents: []
+//                }));
+//            }
+//            result.findBy('startnummer', startnummer).get('contents').pushObject(item);
+//        });
+//
+//        return result;
+//    }.property('filteredContent.[]', 'content.length'),
 
     filteredContent: function () {
         var filter = this.get('filtersn');
@@ -72,8 +91,8 @@ App.LapsController = Ember.ArrayController.extend({
                 if (!confirm('Möchten Sie diesen Datensatz wirklich löschen?')) {
                     return;
                 }
-                var startnummer = item.get('startnummer');
-                var toDelete = this.filterBy('startnummer', startnummer);
+                var token = item.get('token');
+                var toDelete = this.filterBy('token', token);
                 toDelete.forEach(function (rec) {
                     Ember.run.once(this, function () {
                         rec.deleteRecord();
@@ -82,6 +101,21 @@ App.LapsController = Ember.ArrayController.extend({
                 }, this);
             }
         }
+//        deleteStartnummer: function (item) {
+//            if (item) {
+//                if (!confirm('Möchten Sie diesen Datensatz wirklich löschen?')) {
+//                    return;
+//                }
+//                var startnummer = item.get('startnummer');
+//                var toDelete = this.filterBy('startnummer', startnummer);
+//                toDelete.forEach(function (rec) {
+//                    Ember.run.once(this, function () {
+//                        rec.deleteRecord();
+//                        rec.save();
+//                    });
+//                }, this);
+//            }
+//        }
     }
 })
 ;
