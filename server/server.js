@@ -4,6 +4,8 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var httpStatus = require('http-status-codes');
 
+var NUMBER_LAPS = 6;
+
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -71,12 +73,12 @@ app.post('/api/laps', function (req, res) {
             }
         });
     // deltas berechnen
-    if (data.lap.runde === 4) {
-        var deltaM = Math.round(sumDelta / 4 * 100) / 100;
+    if (data.lap.runde === NUMBER_LAPS) {
+        var deltaM = Math.round(sumDelta / NUMBER_LAPS * 100) / 100;
         var sql = "INSERT INTO laps (startnummer, token, runde, laptime, setzrunde, meanDelta, delta, sumDelta, date) VALUES ('" +
             data.lap.startnummer +
             "', '" + data.lap.token +
-            "', '" + 5 +
+            "', '" + (NUMBER_LAPS+1) +
             "', '" + 0 +
             "', '" + 0 +
             "', '" + 1 +

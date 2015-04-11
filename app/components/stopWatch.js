@@ -151,7 +151,7 @@ App.StopWatchComponent = Ember.Component.extend({
             this.get('laps').pushObject(newLap);
             var newLapStr = JSON.stringify(newLap);
             this.sendAction('saveNewRecord', newLap);
-            if (this.get('runde') === 4) {
+            if (this.get('runde') === App.get('NUMBER_LAPS')) {
                 this.set('ready', true);
                 this.set('running', false);
                 return;

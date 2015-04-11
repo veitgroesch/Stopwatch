@@ -3,13 +3,22 @@ App.LapsController = Ember.ArrayController.extend({
     dataDeleted: false,
     sortProperties: ['startnummer' , 'runde'],
     sortAscending: true,
-
     startnummerListe: function () {
         var laps = this.get('arrangedContent');
         var result = [];
 
         return result;
     }.property('arrangedContent', 'content.length'),
+
+    labels: function () {
+        var result = [];
+        for (var i = 1; i <= App.get('NUMBER_LAPS'); i++) {
+            result.pushObject(Ember.Object.create({
+                label: "Runde " + i
+            }));
+        }
+        return result;
+    }.property('content'),
 
     groupedResults: function () {
         var result = [];
@@ -30,23 +39,6 @@ App.LapsController = Ember.ArrayController.extend({
 
         return result;
     }.property('filteredContent.[]', 'content.length'),
-//    groupedResults: function () {
-//        var result = [];
-//        this.get('filteredContent').forEach(function (item) {
-//            var startnummer = item.get('startnummer');
-//            var hasType = !!result.findBy('startnummer', startnummer);
-//            var laptime = item.get('laptime');
-//            if (!hasType) {
-//                result.pushObject(Ember.Object.create({
-//                    startnummer: startnummer,
-//                    contents: []
-//                }));
-//            }
-//            result.findBy('startnummer', startnummer).get('contents').pushObject(item);
-//        });
-//
-//        return result;
-//    }.property('filteredContent.[]', 'content.length'),
 
     filteredContent: function () {
         var filter = this.get('filtersn');
@@ -61,19 +53,45 @@ App.LapsController = Ember.ArrayController.extend({
     actions: {
         createCSV: function () {
             var data = [];
-            this.get('arrangedContent').forEach(
+            this.get('groupedResults').forEach(
                 function (item) {
-                    var obj = {
-                        'startnummer': item.get('startnummer'),
-                        'runde': item.get('runde'),
-                        'laptime': item.get('laptime'),
-                        'delta': item.get('delta')
-                    };
+                    var obj = {};
+                    var i = 0;
+                    item.get('contents').forEach(function (lap) {
+                        if (lap.get('setzrunde')) {
+                            obj['Setzrunde '] = lap.get('laptime');
+                        } else if (lap.get('meanDelta')) {
+                            obj['Delta '] = lap.get('delta');
+                        } else {
+                            obj['Runde ' + i] = lap.get('laptime');
+                            obj['Delta ' + i] = lap.get('delta');
+                        }
+                        i++;
+                    });
+                    obj['Startnummer '] = item.get('startnummer');
                     data.push(obj);
                 }
             );
+//            this.get('arrangedContent').forEach(
+//                function (item) {
+//                    var obj = {
+//                        'startnummer': item.get('startnummer'),
+//                        'runde': item.get('runde'),
+//                        'laptime': item.get('laptime'),
+//                        'delta': item.get('delta')
+//                    };
+//                    data.push(obj);
+//                }
+//            );
             console.log(data);
-            App.get('utils').createCSV(data, 'Classic Motor Days 2015', true);
+            var currentDate = new Date();
+            var dateTime = currentDate.getDate() + "." +
+                (currentDate.getMonth() + 1) + "." +
+                currentDate.getFullYear() + " " +
+                currentDate.getHours() + "-" +
+                currentDate.getMinutes() + " Uhr";
+            var filename = 'Ergebnisse CMD ' + dateTime;
+            App.get('utils').createCSV(data, filename, true);
         },
         sortBy: function (property) {
             this.set('sortProperties', [property]);
@@ -88,6 +106,7 @@ App.LapsController = Ember.ArrayController.extend({
         },
         deleteStartnummer: function (item) {
             if (item) {
+                console.log("deleteStartnummer", item);
                 if (!confirm('Möchten Sie diesen Datensatz wirklich löschen?')) {
                     return;
                 }
@@ -101,21 +120,6 @@ App.LapsController = Ember.ArrayController.extend({
                 }, this);
             }
         }
-//        deleteStartnummer: function (item) {
-//            if (item) {
-//                if (!confirm('Möchten Sie diesen Datensatz wirklich löschen?')) {
-//                    return;
-//                }
-//                var startnummer = item.get('startnummer');
-//                var toDelete = this.filterBy('startnummer', startnummer);
-//                toDelete.forEach(function (rec) {
-//                    Ember.run.once(this, function () {
-//                        rec.deleteRecord();
-//                        rec.save();
-//                    });
-//                }, this);
-//            }
-//        }
     }
 })
 ;

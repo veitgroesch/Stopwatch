@@ -6,17 +6,16 @@
     <tr>
         <th>Startnummer</th>
         <th>Setzrunde</th>
-        <th>Runde 1</th>
-        <th>Runde 2</th>
-        <th>Runde 3</th>
-        <th>Runde 4</th>
+        {{#each labels}}
+            <th>{{label}}</th>
+        {{/each}}
         <th>Abweichung</th>
     </tr>
     </thead>
     <tbody>
     {{#each groupedResults}}
         <tr>
-            <td class="startnummer">{{startnummer}}</td>
+            <td class="startnummer"><strong>{{startnummer}}</strong></td>
             {{#each contents}}
                 {{#if setzrunde}}
                     <td>
@@ -24,16 +23,16 @@
                     </td>
                 {{else}}
                     {{#if meanDelta}}
-                        <td>&#916;-Mittelwert = {{delta}} s</td>
+                        <td><strong>&#916; = {{delta}} s</strong></td>
                     {{else}}
                         <td>
-                            {{laptime}} s (&#916; = {{delta}} s)
+                            {{laptime}} s<br>&#916; = {{delta}} s
                         </td>
                     {{/if}}
                 {{/if}}
             {{/each}}
             <td>
-                <button class="btn btn-danger btn-sm" {{action "deleteStartnummer" this}}>Löschen</button>
+                <button class="btn btn-danger btn-sm" {{action deleteStartnummer this}}>Löschen</button>
             </td>
         </tr>
     {{/each}}

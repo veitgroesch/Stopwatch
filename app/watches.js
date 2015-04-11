@@ -18,6 +18,7 @@ App.WatchesRoute = Ember.Route.extend({
 
 App.WatchesController = Ember.ArrayController.extend({
     dataDeleted: false,
+
     actions: {
         saveNewRecord: function (newLap) {
             var newLapData = this.store.createRecord('lap');

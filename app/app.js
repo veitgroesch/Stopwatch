@@ -1,5 +1,6 @@
 App = Ember.Application.create({
     LOG_TRANSITIONS: true,
+    NUMBER_LAPS: 6,
     utils: {
         createCSV: function (JSONData, ReportTitle, ShowLabel) {
 
@@ -49,9 +50,9 @@ App = Ember.Application.create({
             }
 
             //Generate a file name
-            var fileName = "MyReport_";
             //this will remove the blank-spaces from the title and replace it with an underscore
-            fileName += ReportTitle.replace(/ /g, "_");
+            //fileName += ReportTitle.replace(/ /g, "_");
+            var fileName = ReportTitle;
 
             //Initialize file format you want csv or xls
             var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
