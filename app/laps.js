@@ -56,6 +56,7 @@ App.LapsController = Ember.ArrayController.extend({
             this.get('groupedResults').forEach(
                 function (item) {
                     var obj = {};
+                    obj['Startnummer '] = item.get('startnummer');
                     var i = 0;
                     item.get('contents').forEach(function (lap) {
                         if (lap.get('setzrunde')) {
@@ -68,27 +69,14 @@ App.LapsController = Ember.ArrayController.extend({
                         }
                         i++;
                     });
-                    obj['Startnummer '] = item.get('startnummer');
                     data.push(obj);
                 }
             );
-//            this.get('arrangedContent').forEach(
-//                function (item) {
-//                    var obj = {
-//                        'startnummer': item.get('startnummer'),
-//                        'runde': item.get('runde'),
-//                        'laptime': item.get('laptime'),
-//                        'delta': item.get('delta')
-//                    };
-//                    data.push(obj);
-//                }
-//            );
-            console.log(data);
             var currentDate = new Date();
             var dateTime = currentDate.getDate() + "." +
                 (currentDate.getMonth() + 1) + "." +
                 currentDate.getFullYear() + " " +
-                currentDate.getHours() + "-" +
+                currentDate.getHours() + "." +
                 currentDate.getMinutes() + " Uhr";
             var filename = 'Ergebnisse CMD ' + dateTime;
             App.get('utils').createCSV(data, filename, true);

@@ -3,11 +3,11 @@ App = Ember.Application.create({
     NUMBER_LAPS: 6,
     utils: {
         createCSV: function (JSONData, ReportTitle, ShowLabel) {
-
+            var separator = ';';
             //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
             var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
 
-            var CSV = 'sep=,\r\n\n';
+            var CSV = 'sep=' + separator + '\r\n\n';
             //Set Report title in first row or line
 
             CSV += ReportTitle + '\r\n\n';
@@ -19,8 +19,8 @@ App = Ember.Application.create({
                 //This loop will extract the label from 1st index of on array
                 for (var index in arrData[0]) {
 
-                    //Now convert each value to string and comma-seprated
-                    rowl += index + ',';
+                    //Now convert each value to string and comma-separated
+                    rowl += index + separator;
                 }
 
                 rowl = rowl.slice(0, -1);
@@ -35,7 +35,9 @@ App = Ember.Application.create({
 
                 //2nd loop will extract each column and convert it in string comma-seprated
                 for (var j in arrData[i]) {
-                    row += '"' + arrData[i][j] + '",';
+                    var value = arrData[i][j].toString();
+                    value = value.replace(/\./g, ",");
+                    row += '"' + value + '"' + separator;
                 }
 
                 row.slice(0, row.length - 1);
