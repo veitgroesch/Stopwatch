@@ -4,7 +4,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var httpStatus = require('http-status-codes');
 
-var NUMBER_LAPS = 6;
+var NUMBER_LAPS = 4;
 
 var app = express();
 var http = require('http').Server(app);
@@ -46,19 +46,13 @@ app.use(bodyParser.urlencoded({
 
 app.post('/api/laps', function (req, res) {
     var data = req.body;
-    var setzrunde = data.lap.setzrunde ? 1 : 0;
-    var meanDelta = data.lap.meanDelta ? 1 : 0;
-    var sumDelta = data.lap.sumDelta;
 
-    var sql = "INSERT INTO laps (startnummer, token, runde, laptime, setzrunde, meanDelta, delta, sumDelta, date) VALUES ('" +
+    var sql = "INSERT INTO laps (startnummer, token, runde, laptime, delta, date) VALUES ('" +
         data.lap.startnummer +
         "', '" + data.lap.token +
         "', '" + data.lap.runde +
         "', '" + data.lap.laptime +
-        "', '" + setzrunde +
-        "', '" + meanDelta +
         "', '" + data.lap.delta +
-        "', '" + data.lap.sumDelta +
         "', '" + data.lap.date + "')";
     connection.query(sql,
         function (err, rows, fields) {
@@ -72,32 +66,24 @@ app.post('/api/laps', function (req, res) {
                 res.status(httpStatus.CREATED).json(data);
             }
         });
-    // deltas berechnen
-    if (data.lap.runde === NUMBER_LAPS) {
-        var deltaM = Math.round(sumDelta / NUMBER_LAPS * 100) / 100;
-        var sql = "INSERT INTO laps (startnummer, token, runde, laptime, setzrunde, meanDelta, delta, sumDelta, date) VALUES ('" +
-            data.lap.startnummer +
-            "', '" + data.lap.token +
-            "', '" + (NUMBER_LAPS+1) +
-            "', '" + 0 +
-            "', '" + 0 +
-            "', '" + 1 +
-            "', '" + deltaM +
-            "', '" + 0 +
-            "', '" + data.lap.date + "')";
-        connection.query(sql,
-            function (err, rows, fields) {
-                if (err) {
-                    console.log('error: Database INSERT');
-                    throw err;
-                } else {
-                    var id = rows.insertId;
-                    data.lap.id = id;
-                    io.emit('newdata', {});
-                    //res.status(httpStatus.CREATED).json(data);
-                }
-            });
-    }
+
+});
+
+app.put('/api/laps/:id', function (req, res) {
+    var id = req.params.id;
+    var lap = req.body.lap;
+    //var sql = "UPDATE `laps` SET `gueltig`=" + lap.gueltig + " WHERE `id`=" + id;
+    console.log(sql);
+    connection.query(sql,
+        function (err, rows, fields) {
+            if (err) {
+                console.log('error: Database UPDATE');
+                throw err;
+            } else {
+                //io.emit('deldata', req.params.id);
+                res.status(httpStatus.OK).end();
+            }
+        });
 });
 
 app.delete('/api/laps/:id', function (req, res) {

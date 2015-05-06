@@ -121,12 +121,10 @@ App.StopWatchComponent = Ember.Component.extend({
             this.set('ready', false);
         },
         lap: function () {
-            var date = new Date();
-            var isSetzrunde = false;
+            var date = Date.now();
             var sumDelta = 0;
             var delta;
             if (this.get('runde') === 0) {
-                isSetzrunde = true;
                 this.set('setzrunde', this.get('time'));
                 delta = 0;
             } else {
@@ -142,7 +140,6 @@ App.StopWatchComponent = Ember.Component.extend({
                 'token': this.get('token'),
                 'laptime': this.get('time'),
                 'runde': this.get('runde'),
-                'setzrunde': isSetzrunde,
                 'meanDelta': false,
                 'delta': delta,
                 'sumDelta': sumDelta,

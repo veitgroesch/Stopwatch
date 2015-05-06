@@ -1,6 +1,6 @@
 App = Ember.Application.create({
     LOG_TRANSITIONS: true,
-    NUMBER_LAPS: 6,
+    NUMBER_LAPS: 4,
     utils: {
         createCSV: function (JSONData, ReportTitle, ShowLabel) {
             var separator = ';';
@@ -88,11 +88,10 @@ App.Lap = DS.Model.extend({
     startnummer: DS.attr(),
     token: DS.attr(),
     runde: DS.attr(),
+    gueltig: DS.attr(),
     laptime: DS.attr(),
     setzrunde: DS.attr(),
-    meanDelta: DS.attr(),
     delta: DS.attr(),
-    sumDelta: DS.attr(),
     date: DS.attr('string')
 });
 

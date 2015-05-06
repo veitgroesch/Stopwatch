@@ -9,6 +9,16 @@
 
 /* Übersichtsseite */
 
+.lapTable .group {
+    background-color: rgb(255, 251, 153) !important;
+    text-align: center;
+    font-size: 24px !important;
+}
+
+.lapTable .ungueltig {
+    text-decoration: line-through;
+}
+
 .lapTable tbody {
     font-size: 16px;
     color: #31708f;
@@ -66,12 +76,12 @@
     padding: 5px 15px !important;
 }
 
-.stopwatch-panel .panel-body{
+.stopwatch-panel .panel-body {
     margin: 0;
     padding: 5px 0;
 }
 
-.stopwatch-panel .row{
+.stopwatch-panel .row {
     margin: 0;
 }
 

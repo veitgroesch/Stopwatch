@@ -15,26 +15,39 @@
     <tbody>
     {{#each groupedResults}}
         <tr>
-            <td class="startnummer"><strong>{{startnummer}}</strong></td>
-            {{#each contents}}
-                {{#if setzrunde}}
-                    <td>
-                        {{laptime}} s
-                    </td>
-                {{else}}
-                    {{#if meanDelta}}
-                        <td><strong>&#916; = {{delta}} s</strong></td>
+            <td colspan="10" class="group"><strong>Gruppe {{group}}</strong></td>
+        </tr>
+        {{#each races}}
+            <tr>
+                <td class="startnummer"><strong>{{startnummer}}</strong></td>
+                {{#each laps}}
+                    {{#if runde}}
+                        {{#if laptime}}
+                            {{#if gueltig}}
+                                <td>
+                                    {{laptime}} s<br>&#916; = {{delta}} s
+                            {{else}}
+                                <td class="ungueltig">
+                                    {{laptime}} s<br>&#916; = {{delta}} s
+                            {{/if}}
+                        <input type="checkbox" {{bind-attr checked=checked}} {{action toggleCheckbox this}}>
+                                </td>
+                        {{else}}
+                            <td>
+                            </td>
+                        {{/if}}
                     {{else}}
                         <td>
-                            {{laptime}} s<br>&#916; = {{delta}} s
+                            {{laptime}} s
                         </td>
                     {{/if}}
-                {{/if}}
-            {{/each}}
-            <td>
-                <button class="btn btn-danger btn-sm" {{action deleteStartnummer this}}>Löschen</button>
-            </td>
-        </tr>
+                {{/each}}
+                <td><strong>&#916; = {{meanDelta}} s</strong></td>
+                <td>
+                    <button class="btn btn-danger btn-sm" {{action deleteStartnummer this}}>Löschen</button>
+                </td>
+            </tr>
+        {{/each}}
     {{/each}}
     </tbody>
 </table>

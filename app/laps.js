@@ -1,8 +1,9 @@
 App.LapsController = Ember.ArrayController.extend({
     filtersn: '',
     dataDeleted: false,
-    sortProperties: ['startnummer' , 'runde'],
+    sortProperties: ['runde', 'date'],
     sortAscending: true,
+    toggled: false,
     startnummerListe: function () {
         var laps = this.get('arrangedContent');
         var result = [];
@@ -23,32 +24,75 @@ App.LapsController = Ember.ArrayController.extend({
     groupedResults: function () {
         var result = [];
         this.get('filteredContent').forEach(function (item) {
-            var token = item.get('token');
+            // for the checkboxes
+            item.set('checked', item.get('gueltig') === 1);
+
+            // group data on first digit of startnummer
             var startnummer = item.get('startnummer');
-            var hasType = !!result.findBy('token', token);
-            var laptime = item.get('laptime');
-            if (!hasType) {
+            var date = item.get('date');
+            var group = startnummer.substring(0, 1);
+            var hasGroup = !!result.findBy('group', group);
+            if (!hasGroup) {
                 result.pushObject(Ember.Object.create({
-                    token: token,
-                    startnummer: startnummer,
-                    contents: []
+                    group: group,
+                    date: date,
+                    races: []
                 }));
             }
-            result.findBy('token', token).get('contents').pushObject(item);
+            var token = item.get('token');
+            var hasToken = !!result.findBy('group', group).get('races').findBy('token', token);
+            if (!hasToken) {
+                result.findBy('group', group).get('races').pushObject(Ember.Object.create({
+                    token: token,
+                    startnummer: startnummer,
+                    meanDelta: "",
+                    laps: []
+                }));
+            }
+            result.findBy('group', group).get('races').findBy('token', token).get('laps').pushObject(item);
         });
+        // Deltas berechnen
+        result.forEach(function (group) {
+            group.get('races').forEach(function (race) {
+                var meanDelta = 0;
+                // number of deltas to count
+                var n = 0;
+                // number of rounds
+                var m = 0;
+                race.get('laps').forEach(function (lap) {
+                    if (lap.get('runde') > 0 && lap.get('gueltig')) {
+                        meanDelta += Math.abs(lap.get('delta'));
+                        n++;
+                    }
+                    m++;
+                });
+                if (n > 0) {
+                    meanDelta = Math.round(meanDelta / n * 10) / 10;
+                }
+                race.meanDelta = meanDelta;
+                for (var i = 0; i < App.get('NUMBER_LAPS') - m; i++) {
+                    race.get('laps').pushObject(Ember.Object.create({
 
+                    }));
+                }
+            });
+            // Nach Deltas sortieren
+            group.set('races', group.get('races').sortBy('meanDelta'));
+        });
+        console.log(result);
         return result;
-    }.property('filteredContent.[]', 'content.length'),
+    }.property('filteredContent.[]', 'content.length', 'content'),
 
     filteredContent: function () {
+        this.set('toggled', false);
         var filter = this.get('filtersn');
         var rx = new RegExp(filter, 'gi');
         var laps = this.get('arrangedContent');
 
         return laps.filter(function (lap) {
-            return lap.get('startnummer').match(rx);
+            return lap.get('startnummer').substring(0, 1).match(rx);
         });
-    }.property('arrangedContent', 'filtersn', 'content.length'),
+    }.property('arrangedContent', 'filtersn', 'content.length', 'toggled'),
 
     actions: {
         createCSV: function () {
@@ -107,10 +151,24 @@ App.LapsController = Ember.ArrayController.extend({
                     });
                 }, this);
             }
+        },
+        toggleCheckbox: function (item) {
+            if (item) {
+                var that = this;
+                var lap = this.store.find('lap', item.get('id')).then(function (lap) {
+                    if (lap.get('gueltig') === 1) {
+                        lap.set('gueltig', 0);
+                    } else {
+                        lap.set('gueltig', 1);
+                    }
+                    //console.log("toggleCheckbox", lap);
+                    lap.save();
+                    that.set('toggled', true);
+                });
+            }
         }
     }
-})
-;
+});
 
 App.LapsRoute = Ember.Route.extend({
     model: function () {
