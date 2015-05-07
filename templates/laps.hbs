@@ -42,7 +42,11 @@
                         </td>
                     {{/if}}
                 {{/each}}
-                <td><strong>&#916; = {{meanDelta}} s</strong></td>
+                <td>
+                    <strong>&#916; = {{meanDelta}} s</strong>
+                    <br>
+                    v = {{velocity}} km/h
+                </td>
                 <td>
                     <button class="btn btn-danger btn-sm" {{action deleteStartnummer this}}>Löschen</button>
                 </td>

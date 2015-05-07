@@ -58,17 +58,26 @@ App.LapsController = Ember.ArrayController.extend({
                 var n = 0;
                 // number of rounds
                 var m = 0;
+                // total time
+                var t = 0;
+                // mean velocity
+                var v = 0;
                 race.get('laps').forEach(function (lap) {
                     if (lap.get('runde') > 0 && lap.get('gueltig')) {
                         meanDelta += Math.abs(lap.get('delta'));
                         n++;
+                        t += lap.get('laptime');
                     }
                     m++;
                 });
                 if (n > 0) {
                     meanDelta = Math.round(meanDelta / n * 10) / 10;
                 }
+                if (t > 0) {
+                    v = Math.round(App.get('LENGTH_COURSE') / t * 3.6);
+                }
                 race.meanDelta = meanDelta;
+                race.velocity = v;
                 for (var i = 0; i < App.get('NUMBER_LAPS') - m; i++) {
                     race.get('laps').pushObject(Ember.Object.create({
 
