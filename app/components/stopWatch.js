@@ -121,7 +121,7 @@ App.StopWatchComponent = Ember.Component.extend({
             this.set('ready', false);
         },
         lap: function () {
-            var date = Date.now();
+            var date = new Date().getTime();
             var sumDelta = 0;
             var delta;
             if (this.get('runde') === 0) {

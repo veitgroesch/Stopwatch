@@ -46,7 +46,6 @@ app.use(bodyParser.urlencoded({
 
 app.post('/api/laps', function (req, res) {
     var data = req.body;
-
     var sql = "INSERT INTO laps (startnummer, token, runde, laptime, delta, date) VALUES ('" +
         data.lap.startnummer +
         "', '" + data.lap.token +
@@ -72,15 +71,14 @@ app.post('/api/laps', function (req, res) {
 app.put('/api/laps/:id', function (req, res) {
     var id = req.params.id;
     var lap = req.body.lap;
-    //var sql = "UPDATE `laps` SET `gueltig`=" + lap.gueltig + " WHERE `id`=" + id;
-    console.log(sql);
+    var sql = "UPDATE `laps` SET `gueltig`=" + lap.gueltig + " WHERE `id`=" + id;
     connection.query(sql,
         function (err, rows, fields) {
             if (err) {
                 console.log('error: Database UPDATE');
                 throw err;
             } else {
-                //io.emit('deldata', req.params.id);
+                io.emit('changedata', req.params.id);
                 res.status(httpStatus.OK).end();
             }
         });
@@ -96,6 +94,20 @@ app.delete('/api/laps/:id', function (req, res) {
             } else {
                 io.emit('deldata', req.params.id);
                 res.status(httpStatus.OK).end();
+            }
+        });
+});
+
+app.get('/api/laps/:id', function (req, res) {
+    var sql = "SELECT * FROM laps WHERE `id`=" + req.params.id;
+    connection.query(sql,
+        function (err, rows, fields) {
+            if (err) {
+                console.log('error: Database INSERT');
+                throw err;
+            } else {
+                var laps = {'laps': rows[0]};
+                res.status(httpStatus.OK).json(laps);
             }
         });
 });

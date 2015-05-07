@@ -1,15 +1,9 @@
 App.LapsController = Ember.ArrayController.extend({
     filtersn: '',
     dataDeleted: false,
-    sortProperties: ['runde', 'date'],
+    sortProperties: ['runde'],
     sortAscending: true,
     toggled: false,
-    startnummerListe: function () {
-        var laps = this.get('arrangedContent');
-        var result = [];
-
-        return result;
-    }.property('arrangedContent', 'content.length'),
 
     labels: function () {
         var result = [];
@@ -30,16 +24,21 @@ App.LapsController = Ember.ArrayController.extend({
             // group data on first digit of startnummer
             var startnummer = item.get('startnummer');
             var date = item.get('date');
+            var token = item.get('token');
             var group = startnummer.substring(0, 1);
-            var hasGroup = !!result.findBy('group', group);
+            var groupItem = result.findBy('group', group);
+            var hasGroup = !!groupItem;
             if (!hasGroup) {
                 result.pushObject(Ember.Object.create({
                     group: group,
-                    date: date,
+                    token: token,
                     races: []
                 }));
+            } else {
+                if (token > groupItem.get('token')) {
+                    groupItem.set('token', token);
+                }
             }
-            var token = item.get('token');
             var hasToken = !!result.findBy('group', group).get('races').findBy('token', token);
             if (!hasToken) {
                 result.findBy('group', group).get('races').pushObject(Ember.Object.create({
@@ -79,9 +78,9 @@ App.LapsController = Ember.ArrayController.extend({
             // Nach Deltas sortieren
             group.set('races', group.get('races').sortBy('meanDelta'));
         });
-        console.log(result);
+        result = result.sortBy('token').reverse();
         return result;
-    }.property('filteredContent.[]', 'content.length', 'content'),
+    }.property('filteredContent'),
 
     filteredContent: function () {
         this.set('toggled', false);
@@ -177,6 +176,16 @@ App.LapsRoute = Ember.Route.extend({
     actions: {
         refresh: function () {
             this.set('model', this.store.find('lap'));
+        },
+        changed: function (id) {
+            var that = this;
+            this.store.find('lap', id).then(function (lap) {
+                if (lap) {
+                    lap.reload().then(function () {
+                        that.controller.set('toggled', true);
+                    });
+                }
+            });
         },
         deleted: function (id) {
             if (!this.controller.get('dataDeleted')) {

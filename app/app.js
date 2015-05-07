@@ -92,7 +92,7 @@ App.Lap = DS.Model.extend({
     laptime: DS.attr(),
     setzrunde: DS.attr(),
     delta: DS.attr(),
-    date: DS.attr('string')
+    date: DS.attr()
 });
 
 App.Router.map(function () {

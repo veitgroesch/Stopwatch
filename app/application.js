@@ -8,6 +8,9 @@ App.ApplicationRoute = Ember.Route.extend({
         socket.on('deldata', function (id) {
             self.controllerFor('laps').send('deleted', id);
         });
+        socket.on('changedata', function (id) {
+            self.controllerFor('laps').send('changed', id);
+        });
     }
 });
 App.ApplicationController = Ember.Controller.extend({
