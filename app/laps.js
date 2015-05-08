@@ -74,7 +74,7 @@ App.LapsController = Ember.ArrayController.extend({
                     meanDelta = Math.round(meanDelta / n * 10) / 10;
                 }
                 if (t > 0) {
-                    v = Math.round(App.get('LENGTH_COURSE') / t * 3.6);
+                    v = Math.round(App.get('LENGTH_COURSE') * n / t * 3.6);
                 }
                 race.meanDelta = meanDelta;
                 race.velocity = v;
@@ -105,23 +105,30 @@ App.LapsController = Ember.ArrayController.extend({
     actions: {
         createCSV: function () {
             var data = [];
-            this.get('groupedResults').forEach(
-                function (item) {
-                    var obj = {};
-                    obj['Startnummer '] = item.get('startnummer');
-                    var i = 0;
-                    item.get('contents').forEach(function (lap) {
-                        if (lap.get('setzrunde')) {
-                            obj['Setzrunde '] = lap.get('laptime');
-                        } else if (lap.get('meanDelta')) {
-                            obj['Delta '] = lap.get('delta');
-                        } else {
-                            obj['Runde ' + i] = lap.get('laptime');
-                            obj['Delta ' + i] = lap.get('delta');
-                        }
-                        i++;
+            var groups = this.get('groupedResults').sortBy('group');
+            groups.forEach(function (group) {
+                    group.get('races').forEach(function (race) {
+                        var obj = {};
+                        obj['Startnummer '] = race.get('startnummer');
+                        console.log('race', race);
+                        var i = 0;
+                        race.get('laps').forEach(function (lap) {
+                            if (lap.get('runde') === 0) {
+                                obj['Setzrunde '] = lap.get('laptime');
+                            } else {
+                                if (lap.get('gueltig')) {
+                                    obj['Runde ' + i] = lap.get('laptime');
+                                } else {
+                                    obj['Runde ' + i] = "---";
+                                }
+                            }
+                            i++;
+                        });
+                        obj['Delta '] = race.get('meanDelta');
+                        obj['Geschwindigkeit '] = race.get('velocity');
+                        console.log('obj', obj);
+                        data.push(obj);
                     });
-                    data.push(obj);
                 }
             );
             var currentDate = new Date();
