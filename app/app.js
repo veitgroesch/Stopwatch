@@ -1,6 +1,7 @@
 App = Ember.Application.create({
     LOG_TRANSITIONS: true,
     NUMBER_LAPS: 4,
+    PASSWORD: 'cmd',
     LENGTH_COURSE: 2800, //Länge des Kurses
     utils: {
         createCSV: function (JSONData, ReportTitle, ShowLabel) {

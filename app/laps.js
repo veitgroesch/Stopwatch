@@ -1,4 +1,9 @@
 App.LapsController = Ember.ArrayController.extend({
+    password: null,
+    admin: function () {
+        return this.get('password') === App.get('PASSWORD');
+    }.property('password'),
+
     filtersn: '',
     dataDeleted: false,
     sortProperties: ['runde'],
@@ -17,6 +22,7 @@ App.LapsController = Ember.ArrayController.extend({
 
     groupedResults: function () {
         var result = [];
+        var that = this;
         this.get('filteredContent').forEach(function (item) {
             // for the checkboxes
             item.set('checked', item.get('gueltig') === 1);
@@ -63,6 +69,7 @@ App.LapsController = Ember.ArrayController.extend({
                 // mean velocity
                 var v = 0;
                 race.get('laps').forEach(function (lap) {
+                    lap.admin = that.get('admin');
                     if (lap.get('runde') > 0 && lap.get('gueltig')) {
                         meanDelta += Math.abs(lap.get('delta'));
                         n++;
@@ -89,7 +96,7 @@ App.LapsController = Ember.ArrayController.extend({
         });
         result = result.sortBy('token').reverse();
         return result;
-    }.property('filteredContent'),
+    }.property('filteredContent', 'admin'),
 
     filteredContent: function () {
         this.set('toggled', false);

@@ -1,5 +1,13 @@
-<h1>Übersicht</h1>
-{{input type='text' placeholder='Startnummer filtern' value=filtersn}}
+<div id="menu" class="well well-sm">
+    <div id="login" >
+        Als Administrator anmelden:
+        {{input type='password' value=password placeholder="Passwort"}}
+    </div>
+    {{input type="text" placeholder='Gruppe filtern' value=filtersn}}
+    {{#if admin}}
+        <button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
+    {{/if}}
+</div>
 
 <table class="table table-striped table-hover lapTable">
     <thead>
@@ -24,14 +32,17 @@
                     {{#if runde}}
                         {{#if laptime}}
                             {{#if gueltig}}
-                                <td>
-                                    {{laptime}} s<br>&#916; = {{delta}} s
+                            <td>
+                                {{laptime}} s<br>&#916; = {{delta}} s
                             {{else}}
-                                <td class="ungueltig">
-                                    {{laptime}} s<br>&#916; = {{delta}} s
+                            <td class="ungueltig">
+                                {{laptime}} s<br>&#916; = {{delta}} s
                             {{/if}}
-                        <input type="checkbox" {{bind-attr checked=checked}} {{action toggleCheckbox this}}>
-                                </td>
+
+                            {{#if admin}}
+                                <input type="checkbox" {{bind-attr checked=checked}} {{action toggleCheckbox this}}>
+                            {{/if}}
+                        </td>
                         {{else}}
                             <td>
                             </td>
@@ -48,14 +59,12 @@
                     v = {{velocity}} km/h
                 </td>
                 <td>
-                    <button class="btn btn-danger btn-sm" {{action deleteStartnummer this}}>Löschen</button>
+                    {{#if ../../admin}}
+                        <button class="btn btn-danger btn-sm" {{action deleteStartnummer this}}>Löschen</button>
+                    {{/if}}
                 </td>
             </tr>
         {{/each}}
     {{/each}}
     </tbody>
 </table>
-
-<button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
-
-

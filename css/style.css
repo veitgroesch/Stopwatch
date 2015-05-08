@@ -9,6 +9,21 @@
 
 /* Übersichtsseite */
 
+#login {
+    width: 450px;
+    float: right;
+}
+
+#menu {
+    font-size: 16px;
+    color: #31708f;
+    line-height: 26px;
+}
+
+#menu input {
+    padding-left: 5px;
+}
+
 .lapTable .group {
     background-color: rgb(255, 251, 153) !important;
     text-align: center;
