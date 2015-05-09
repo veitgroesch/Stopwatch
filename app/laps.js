@@ -64,6 +64,7 @@ App.LapsController = Ember.ArrayController.extend({
         // Deltas berechnen
         result.forEach(function (group) {
             group.get('races').forEach(function (race) {
+                race.admin = that.get('admin');
                 var meanDelta = 0;
                 // number of deltas to count
                 var n = 0;
@@ -73,12 +74,16 @@ App.LapsController = Ember.ArrayController.extend({
                 var t = 0;
                 // mean velocity
                 var v = 0;
+                var nv = 0;
                 race.get('laps').forEach(function (lap) {
                     lap.admin = that.get('admin');
                     if (lap.get('runde') > 0 && lap.get('gueltig')) {
                         meanDelta += Math.abs(lap.get('delta'));
                         n++;
+                    }
+                    if (lap.get('runde') == 0 || lap.get('gueltig')) {
                         t += lap.get('laptime');
+                        nv++;
                     }
                     m++;
                 });
@@ -87,7 +92,7 @@ App.LapsController = Ember.ArrayController.extend({
                 }
                 race.meanDelta = meanDelta;
                 if (t > 0) {
-                    v = Math.round(App.get('LENGTH_COURSE') * n / t * 3.6);
+                    v = Math.round(App.get('LENGTH_COURSE') * nv / t * 3.6);
                 }
                 race.velocity = v;
                 for (var i = 0; i < App.get('NUMBER_LAPS') - m + 1; i++) {
@@ -164,7 +169,6 @@ App.LapsController = Ember.ArrayController.extend({
         },
         deleteStartnummer: function (item) {
             if (item) {
-                console.log("deleteStartnummer", item);
                 if (!confirm('Möchten Sie diesen Datensatz wirklich löschen?')) {
                     return;
                 }

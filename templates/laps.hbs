@@ -5,17 +5,17 @@
     </div>
 
     {{input type="text" placeholder='Gruppe filtern' value=filtersn}}
-    &NonBreakingSpace;{{input type="checkbox" checked=tbodyLineBreak}} Zeilenumbruch
-    &NonBreakingSpace;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
+    &nbsp;{{input type="checkbox" checked=tbodyLineBreak}} Zeilenumbruch
+    &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
     {{#if admin}}
-        &NonBreakingSpace;<button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
+        &nbsp;<button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
     {{/if}}
 </div>
 
 <table class="table table-striped table-hover lapTable">
     <thead>
     <tr>
-        <th>Startnummer</th>
+        <th></th>
         <th>Setzrunde</th>
         {{#each labels}}
             <th>{{label}}</th>
@@ -37,26 +37,26 @@
                         {{#unless empty}}
                             {{#if gueltig}}
                             <td>
-                                {{laptime}} s
+                                {{laptime}}&nbsp;s
                                 {{#if ../../../../../../tbodyLineBreak}}
                                     <br>
                                 {{else}}
                                     &bull;
                                 {{/if}}
-                                &#916; = {{delta}} s
+                                &#916;&nbsp;=&nbsp;{{delta}}&nbsp;s
                             {{else}}
                             <td class="ungueltig">
-                                {{laptime}} s
+                                {{laptime}}&nbsp;s
                                 {{#if ../../../../../../tbodyLineBreak}}
                                     <br>
                                 {{else}}
                                     &bull;
                                 {{/if}}
-                                &#916; = {{delta}} s
+                                &#916;&nbsp;=&nbsp;{{delta}}&nbsp;s
                             {{/if}}
 
                             {{#if admin}}
-                                &NonBreakingSpace;<input type="checkbox" {{bind-attr checked=checked}} {{action toggleCheckbox this}}>
+                                &nbsp;<input type="checkbox" {{bind-attr checked=checked}} {{action toggleCheckbox this}}>
                             {{/if}}
                         </td>
                         {{else}}
@@ -66,19 +66,19 @@
                         {{/unless}}
                     {{else}}
                         <td>
-                            {{laptime}} s
+                            {{laptime}}&nbsp;s
                         </td>
                     {{/if}}
                 {{/each}}
                 <td>
-                    <strong>&#916; = {{meanDelta}} s</strong>
+                    <strong>&#916; = {{meanDelta}}&nbsp;s</strong>
                 </td>
                 <td>
-                    <strong>v = {{velocity}} km/h</strong>
+                    <strong>v = {{velocity}}&nbsp;km/h</strong>
                 </td>
                 <td>
-                    {{#if ../../admin}}
-                        <button class="btn btn-danger btn-sm" {{action deleteStartnummer this}}>Löschen</button>
+                    {{#if admin}}&nbsp;
+                        <button class="btn btn-danger btn-sm" {{action deleteStartnummer this}}>&cross;</button>
                     {{/if}}
                 </td>
             </tr>

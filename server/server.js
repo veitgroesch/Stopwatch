@@ -86,6 +86,7 @@ app.put('/api/laps/:id', function (req, res) {
 
 app.delete('/api/laps/:id', function (req, res) {
     var sql = "DELETE FROM `laps` WHERE `id`=" + req.params.id;
+    console.log('delete', sql);
     connection.query(sql,
         function (err, rows, fields) {
             if (err) {
