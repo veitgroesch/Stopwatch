@@ -12,6 +12,7 @@ App.StopWatchComponent = Ember.Component.extend({
     token: '',
 
     running: false,
+    inputDisabled: false,
 
     notRunning: function () {
         return !this.get('running');
@@ -71,6 +72,7 @@ App.StopWatchComponent = Ember.Component.extend({
     actions: {
         start: function () {
             this.set('running', true);
+            this.set('inputDisabled', true);
             this.set('ready', false);
             this.set('token', new Date().getTime());
             console.log('token; ', this.get('token'));
@@ -101,6 +103,7 @@ App.StopWatchComponent = Ember.Component.extend({
             this.set('token', '');
             this.set('laps', []);
             this.set('ready', false);
+            this.set('inputDisabled', false);
         },
         back: function () {
             var runde = this.get('runde');

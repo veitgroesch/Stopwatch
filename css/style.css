@@ -52,6 +52,10 @@
     padding-top: 5px !important;
 }
 
+.lapTable td button {
+    line-height: 0.8 !important;
+}
+
 .lapTable thead {
     font-size: 18px;
     color: #31708f;

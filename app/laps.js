@@ -85,14 +85,15 @@ App.LapsController = Ember.ArrayController.extend({
                 if (n > 0) {
                     meanDelta = Math.round(meanDelta / n * 10) / 10;
                 }
+                race.meanDelta = meanDelta;
                 if (t > 0) {
                     v = Math.round(App.get('LENGTH_COURSE') * n / t * 3.6);
                 }
-                race.meanDelta = meanDelta;
                 race.velocity = v;
-                for (var i = 0; i < App.get('NUMBER_LAPS') - m; i++) {
+                for (var i = 0; i < App.get('NUMBER_LAPS') - m + 1; i++) {
                     race.get('laps').pushObject(Ember.Object.create({
-
+                        empty: true,
+                        runde: 'auf der Piste'
                     }));
                 }
             });

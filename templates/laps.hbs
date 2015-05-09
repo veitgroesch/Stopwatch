@@ -34,7 +34,7 @@
                 <td class="startnummer"><strong>{{startnummer}}</strong></td>
                 {{#each laps}}
                     {{#if runde}}
-                        {{#if laptime}}
+                        {{#unless empty}}
                             {{#if gueltig}}
                             <td>
                                 {{laptime}} s
@@ -56,13 +56,14 @@
                             {{/if}}
 
                             {{#if admin}}
-                                <input type="checkbox" {{bind-attr checked=checked}} {{action toggleCheckbox this}}>
+                                &NonBreakingSpace;<input type="checkbox" {{bind-attr checked=checked}} {{action toggleCheckbox this}}>
                             {{/if}}
                         </td>
                         {{else}}
                             <td>
+                                {{runde}}
                             </td>
-                        {{/if}}
+                        {{/unless}}
                     {{else}}
                         <td>
                             {{laptime}} s
