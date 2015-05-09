@@ -20,7 +20,7 @@ App.LapsController = Ember.ArrayController.extend({
         var result = [];
         for (var i = 1; i <= App.get('NUMBER_LAPS'); i++) {
             result.pushObject(Ember.Object.create({
-                label: "Runde " + i
+                label: i + ". Runde"
             }));
         }
         return result;
@@ -64,7 +64,6 @@ App.LapsController = Ember.ArrayController.extend({
         // Deltas berechnen
         result.forEach(function (group) {
             group.get('races').forEach(function (race) {
-                race.admin = that.get('admin');
                 var meanDelta = 0;
                 // number of deltas to count
                 var n = 0;
@@ -76,12 +75,11 @@ App.LapsController = Ember.ArrayController.extend({
                 var v = 0;
                 var nv = 0;
                 race.get('laps').forEach(function (lap) {
-                    lap.admin = that.get('admin');
                     if (lap.get('runde') > 0 && lap.get('gueltig')) {
                         meanDelta += Math.abs(lap.get('delta'));
                         n++;
                     }
-                    if (lap.get('runde') == 0 || lap.get('gueltig')) {
+                    if (lap.get('runde') === 0 || lap.get('gueltig')) {
                         t += lap.get('laptime');
                         nv++;
                     }
@@ -104,6 +102,13 @@ App.LapsController = Ember.ArrayController.extend({
             });
             // Nach Deltas sortieren
             group.set('races', group.get('races').sortBy('meanDelta'));
+
+            // set positions to race array
+            var position = 0;
+            group.get('races').forEach(function(race) {
+                position++;
+                race.position = position;
+            });
         });
         result = result.sortBy('token').reverse();
         return result;

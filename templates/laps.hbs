@@ -16,7 +16,7 @@
     <thead>
     <tr>
         <th></th>
-        <th>Setzrunde</th>
+        <th colspan="2" style="text-align: right">Setzrunde</th>
         {{#each labels}}
             <th>{{label}}</th>
         {{/each}}
@@ -29,56 +29,57 @@
         <tr>
             <td colspan="10" class="group"><strong>Gruppe {{group}}</strong></td>
         </tr>
-        {{#each races}}
+        {{#each race in races}}
             <tr>
-                <td class="startnummer"><strong>{{startnummer}}</strong></td>
-                {{#each laps}}
-                    {{#if runde}}
-                        {{#unless empty}}
-                            {{#if gueltig}}
+                <td class="startnummer"><strong>{{race.position}})</strong></td>
+                <td class="startnummer"><strong>{{race.startnummer}}</strong></td>
+                {{#each lap in race.laps}}
+                    {{#if lap.runde}}
+                        {{#unless lap.empty}}
+                            {{#if lap.gueltig}}
                             <td>
-                                {{laptime}}&nbsp;s
+                                {{lap.laptime}}&nbsp;s
                                 {{#if ../../../../../../tbodyLineBreak}}
                                     <br>
                                 {{else}}
                                     &bull;
                                 {{/if}}
-                                &#916;&nbsp;=&nbsp;{{delta}}&nbsp;s
+                                &#916;={{lap.delta}}&nbsp;s
                             {{else}}
                             <td class="ungueltig">
-                                {{laptime}}&nbsp;s
+                                {{lap.laptime}}&nbsp;s
                                 {{#if ../../../../../../tbodyLineBreak}}
                                     <br>
                                 {{else}}
                                     &bull;
                                 {{/if}}
-                                &#916;&nbsp;=&nbsp;{{delta}}&nbsp;s
+                                &#916;={{lap.delta}}&nbsp;s
                             {{/if}}
 
-                            {{#if admin}}
-                                &nbsp;<input type="checkbox" {{bind-attr checked=checked}} {{action toggleCheckbox this}}>
+                            {{#if ../../../../../admin}}
+                                &nbsp;<input type="checkbox" {{bind-attr checked=lap.checked}} {{action toggleCheckbox lap}}>
                             {{/if}}
                         </td>
                         {{else}}
                             <td>
-                                {{runde}}
+                                {{lap.runde}}
                             </td>
                         {{/unless}}
                     {{else}}
                         <td>
-                            {{laptime}}&nbsp;s
+                            {{lap.laptime}}&nbsp;s
                         </td>
                     {{/if}}
                 {{/each}}
                 <td>
-                    <strong>&#916; = {{meanDelta}}&nbsp;s</strong>
+                    <strong>&#916; = {{race.meanDelta}}&nbsp;s</strong>
                 </td>
                 <td>
-                    <strong>v = {{velocity}}&nbsp;km/h</strong>
+                    <strong>v = {{race.velocity}}&nbsp;km/h</strong>
                 </td>
                 <td>
-                    {{#if admin}}&nbsp;
-                        <button class="btn btn-danger btn-sm" {{action deleteStartnummer this}}>&cross;</button>
+                    {{#if ../../admin}}
+                        <button class="btn btn-danger btn-sm" {{action deleteStartnummer race}}>&cross;</button>
                     {{/if}}
                 </td>
             </tr>
