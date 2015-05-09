@@ -49,6 +49,7 @@ App.StopWatchComponent = Ember.Component.extend({
         if (!this.get('running') || this.get('ready')) {
             return true;
         }
+        console.log('length', this.get('flaps').length);
         if (this.get('flaps').length === 0){
             return false;
         }
