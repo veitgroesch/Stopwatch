@@ -10,7 +10,7 @@
 /* Übersichtsseite */
 
 #login {
-    width: 450px;
+    width: 220px;
     float: right;
 }
 
@@ -20,14 +20,15 @@
     line-height: 26px;
 }
 
-#menu input {
+#menu input[type="text"], #menu input[type="password"] {
     padding-left: 5px;
+    width: 120px;
 }
 
 .lapTable .group {
     background-color: rgb(255, 251, 153) !important;
     text-align: center;
-    font-size: 24px !important;
+    font-size: 20px !important;
 }
 
 .lapTable .ungueltig {
@@ -35,8 +36,20 @@
 }
 
 .lapTable tbody {
-    font-size: 16px;
     color: #31708f;
+}
+
+.lapTable .tbodySmall{
+    font-size: 16px !important;
+}
+
+.lapTable .tbodyLarge{
+    font-size: 18px !important;
+}
+
+.lapTable td {
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
 }
 
 .lapTable thead {
@@ -50,7 +63,6 @@
 
 .lapTable td:nth-of-type(1) {
     color: darkred;
-    font-size: 16px;
 }
 
 /* Stopwatch */

@@ -1,11 +1,14 @@
 <div id="menu" class="well well-sm">
-    <div id="login" >
-        Als Administrator anmelden:
+    <div id="login">
+        Anmelden:
         {{input type='password' value=password placeholder="Passwort"}}
     </div>
+
     {{input type="text" placeholder='Gruppe filtern' value=filtersn}}
+    &NonBreakingSpace;{{input type="checkbox" checked=tbodyLineBreak}} Zeilenumbruch
+    &NonBreakingSpace;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
     {{#if admin}}
-        <button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
+        &NonBreakingSpace;<button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
     {{/if}}
 </div>
 
@@ -18,9 +21,10 @@
             <th>{{label}}</th>
         {{/each}}
         <th>Delta</th>
+        <th>Geschwindigkeit</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody {{bind-attr class=tbodyClass}}>
     {{#each groupedResults}}
         <tr>
             <td colspan="10" class="group"><strong>Gruppe {{group}}</strong></td>
@@ -33,10 +37,22 @@
                         {{#if laptime}}
                             {{#if gueltig}}
                             <td>
-                                {{laptime}} s<br>&#916; = {{delta}} s
+                                {{laptime}} s
+                                {{#if ../../../../../../tbodyLineBreak}}
+                                    <br>
+                                {{else}}
+                                    &bull;
+                                {{/if}}
+                                &#916; = {{delta}} s
                             {{else}}
                             <td class="ungueltig">
-                                {{laptime}} s<br>&#916; = {{delta}} s
+                                {{laptime}} s
+                                {{#if ../../../../../../tbodyLineBreak}}
+                                    <br>
+                                {{else}}
+                                    &bull;
+                                {{/if}}
+                                &#916; = {{delta}} s
                             {{/if}}
 
                             {{#if admin}}
@@ -55,8 +71,9 @@
                 {{/each}}
                 <td>
                     <strong>&#916; = {{meanDelta}} s</strong>
-                    <br>
-                    v = {{velocity}} km/h
+                </td>
+                <td>
+                    <strong>v = {{velocity}} km/h</strong>
                 </td>
                 <td>
                     {{#if ../../admin}}

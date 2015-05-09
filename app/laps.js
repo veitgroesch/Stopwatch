@@ -4,6 +4,12 @@ App.LapsController = Ember.ArrayController.extend({
         return this.get('password') === App.get('PASSWORD');
     }.property('password'),
 
+    tbodyClass: function() {
+        return this.get('tbodyLargeFont')? "tbodyLarge" : "tbodySmall";
+    }.property('tbodyLargeFont'),
+    tbodyLargeFont: true,
+    tbodyLineBreak: true,
+
     filtersn: '',
     dataDeleted: false,
     sortProperties: ['runde'],
@@ -26,7 +32,6 @@ App.LapsController = Ember.ArrayController.extend({
         this.get('filteredContent').forEach(function (item) {
             // for the checkboxes
             item.set('checked', item.get('gueltig') === 1);
-
             // group data on first digit of startnummer
             var startnummer = item.get('startnummer');
             var date = item.get('date');
@@ -117,7 +122,6 @@ App.LapsController = Ember.ArrayController.extend({
                     group.get('races').forEach(function (race) {
                         var obj = {};
                         obj['Startnummer '] = race.get('startnummer');
-                        console.log('race', race);
                         var i = 0;
                         race.get('laps').forEach(function (lap) {
                             if (lap.get('runde') === 0) {
@@ -133,7 +137,6 @@ App.LapsController = Ember.ArrayController.extend({
                         });
                         obj['Delta '] = race.get('meanDelta');
                         obj['Geschwindigkeit '] = race.get('velocity');
-                        console.log('obj', obj);
                         data.push(obj);
                     });
                 }
