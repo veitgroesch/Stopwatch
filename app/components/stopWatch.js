@@ -49,7 +49,6 @@ App.StopWatchComponent = Ember.Component.extend({
         if (!this.get('running') || this.get('ready')) {
             return true;
         }
-        console.log('length', this.get('flaps').length);
         if (this.get('flaps').length === 0){
             return false;
         }
@@ -72,11 +71,12 @@ App.StopWatchComponent = Ember.Component.extend({
     }.property('laps.length', 'startnummer', 'lapschanged'),
     actions: {
         start: function () {
+            var audio = new Audio('assets/click.wav');
+            audio.play();
             this.set('running', true);
             this.set('inputDisabled', true);
             this.set('ready', false);
             this.set('token', new Date().getTime());
-            console.log('token; ', this.get('token'));
             Ember.run.later(this, function () {
                 this.send('loop');
             }, 100);
@@ -125,6 +125,8 @@ App.StopWatchComponent = Ember.Component.extend({
             this.set('ready', false);
         },
         lap: function () {
+            var audio = new Audio('assets/click.wav');
+            audio.play();
             var date = new Date().getTime();
             var sumDelta = 0;
             var delta;

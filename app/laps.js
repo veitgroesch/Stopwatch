@@ -11,6 +11,7 @@ App.LapsController = Ember.ArrayController.extend({
     tbodyLineBreak: true,
 
     filtersn: '',
+    filterlauf: '',
     dataDeleted: false,
     sortProperties: ['runde'],
     sortAscending: true,
@@ -36,12 +37,16 @@ App.LapsController = Ember.ArrayController.extend({
             var startnummer = item.get('startnummer');
             var date = item.get('date');
             var token = item.get('token');
+            var nlauf = item.get('nlauf');
             var group = startnummer.substring(0, 1);
-            var groupItem = result.findBy('group', group);
+            var filteredResult = result.filterBy('nlauf', nlauf);
+            var groupItem = filteredResult.findBy('group', group);
             var hasGroup = !!groupItem;
             if (!hasGroup) {
                 result.pushObject(Ember.Object.create({
                     group: group,
+                    nlauf: nlauf,
+                    nameLauf: App.get('utils').nameLauf(nlauf),
                     token: token,
                     races: []
                 }));
@@ -50,16 +55,16 @@ App.LapsController = Ember.ArrayController.extend({
                     groupItem.set('token', token);
                 }
             }
-            var hasToken = !!result.findBy('group', group).get('races').findBy('token', token);
+            var hasToken = !!result.filterBy('nlauf', nlauf).findBy('group', group).get('races').findBy('token', token);
             if (!hasToken) {
-                result.findBy('group', group).get('races').pushObject(Ember.Object.create({
+                result.filterBy('nlauf', nlauf).findBy('group', group).get('races').pushObject(Ember.Object.create({
                     token: token,
                     startnummer: startnummer,
                     meanDelta: "",
                     laps: []
                 }));
             }
-            result.findBy('group', group).get('races').findBy('token', token).get('laps').pushObject(item);
+            result.filterBy('nlauf', nlauf).findBy('group', group).get('races').findBy('token', token).get('laps').pushObject(item);
         });
         // Deltas berechnen
         result.forEach(function (group) {
@@ -116,14 +121,14 @@ App.LapsController = Ember.ArrayController.extend({
 
     filteredContent: function () {
         this.set('toggled', false);
-        var filter = this.get('filtersn');
-        var rx = new RegExp(filter, 'gi');
+        var rxsn = new RegExp(this.get('filtersn'), 'gi');
+        var rxlauf = new RegExp(this.get('filterlauf'), 'gi');
         var laps = this.get('arrangedContent');
-
         return laps.filter(function (lap) {
-            return lap.get('startnummer').substring(0, 1).match(rx);
+            return lap.get('startnummer').substring(0, 1).match(rxsn) &&
+                lap.get('nlauf').toString().match(rxlauf);
         });
-    }.property('arrangedContent', 'filtersn', 'content.length', 'toggled'),
+    }.property('arrangedContent', 'filtersn', 'filterlauf', 'content.length', 'toggled'),
 
     actions: {
         createCSV: function () {

@@ -4,6 +4,13 @@ App = Ember.Application.create({
     PASSWORD: 'cmd',
     LENGTH_COURSE: 2800, //Länge des Kurses
     utils: {
+        nameLauf: function (nlauf) {
+            if (nlauf === 0) {
+                return "Trainingslauf";
+            } else {
+                return nlauf + ". Wertungslauf";
+            }
+        },
         createCSV: function (JSONData, ReportTitle, ShowLabel) {
             var separator = ';';
             //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
@@ -90,6 +97,7 @@ App.Lap = DS.Model.extend({
     startnummer: DS.attr(),
     token: DS.attr(),
     runde: DS.attr(),
+    nlauf: DS.attr(),
     gueltig: DS.attr(),
     laptime: DS.attr(),
     setzrunde: DS.attr(),

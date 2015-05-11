@@ -5,6 +5,7 @@
     </div>
 
     {{input type="text" placeholder='Gruppe filtern' value=filtersn}}
+    {{input type="text" placeholder='Lauf filtern' value=filterlauf}}
     &nbsp;{{input type="checkbox" checked=tbodyLineBreak}} Zeilenumbruch
     &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
     {{#if admin}}
@@ -27,7 +28,7 @@
     <tbody {{bind-attr class=tbodyClass}}>
     {{#each groupedResults}}
         <tr>
-            <td colspan="10" class="group"><strong>Gruppe {{group}}</strong></td>
+            <td colspan="10" class="group"><strong>Klasse {{group}} - {{nameLauf}}</strong></td>
         </tr>
         {{#each race in races}}
             <tr>

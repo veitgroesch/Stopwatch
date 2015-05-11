@@ -71,6 +71,13 @@
 
 /* Stopwatch */
 
+#nlauf {
+    text-align: center;
+    font-size: 20px;
+    color: #31708f;
+    margin-bottom: 10px;
+}
+
 .background-red {
     background-color: #d9534f;
     color: #fff;
