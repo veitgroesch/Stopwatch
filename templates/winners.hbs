@@ -17,6 +17,7 @@
         <th></th>
         <th></th>
         <th></th>
+        <th></th>
     </tr>
     </thead>
     <tbody {{bind-attr class=tbodyClass}}>
@@ -30,6 +31,9 @@
                 <td class="startnummer"><strong>{{car.startnummer}}</strong></td>
                 <td>
                     <strong>&#916; = {{car.delta}}&nbsp;s</strong>
+                </td>
+                <td>
+                    <strong>v = {{car.velocity}}&nbsp;km/h</strong>
                 </td>
             </tr>
         {{/each}}

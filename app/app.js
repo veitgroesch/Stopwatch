@@ -14,6 +14,7 @@ App = Ember.Application.create({
                 var startnummer = car.get('startnummer');
                 var position = car.get('winnerPosition');
                 var delta = car.get('delta');
+                var v = car.get('velocity');
                 var groupItem = result.findBy('group', group);
                 var hasGroup = !!groupItem;
                 if (!hasGroup) {
@@ -26,7 +27,8 @@ App = Ember.Application.create({
                 groupItem.get('cars').pushObject(Ember.Object.create({
                     startnummer: startnummer,
                     position: position,
-                    delta: delta
+                    delta: delta,
+                    velocity: v
                 }));
             });
             // Sortieren
@@ -135,12 +137,14 @@ App = Ember.Application.create({
                                 startnummer: race.get('startnummer'),
                                 nlauf: race.get('nlauf'),
                                 delta: 0,
+                                velocity: race.get('velocity'),
                                 winnerPosition: 0,
                                 sumDelta: race.get('meanDelta'),
                                 nDelta: 1
                             }));
                         } else {
                             siegerItem.set('sumDelta', siegerItem.get('sumDelta') + race.get('meanDelta'));
+                            siegerItem.set('velocity', siegerItem.get('velocity') + race.get('velocity'));
                             siegerItem.set('nDelta', siegerItem.get('nDelta') + 1);
                         }
                     }
@@ -160,6 +164,8 @@ App = Ember.Application.create({
                 if (car.get('nDelta') > 0) {
                     var delta = Math.round(car.get('sumDelta') / car.get('nDelta') * 10) / 10;
                     car.set('delta', delta);
+                    var v = Math.round(car.get('velocity') / car.get('nDelta'));
+                    car.set('velocity', v);
                 }
             });
             groups.forEach(function (groupItem) {

@@ -15,9 +15,7 @@ App.WinnersController = Ember.ArrayController.extend({
 
 
     groupedResults: function () {
-        var processedData = App.get('utils').getWinnerList(this.get('filteredContent'));
-        console.log('winnerlist', processedData);
-        return processedData;
+        return App.get('utils').getWinnerList(this.get('filteredContent'));
     }.property('filteredContent', 'admin'),
 
     filteredContent: function () {
