@@ -1,0 +1,38 @@
+<div id="menu" class="well well-sm">
+    <div id="login">
+        Anmelden:
+        {{input type='password' value=password placeholder="Passwort"}}
+    </div>
+
+    {{input type="text" placeholder='Klasse filtern' value=filtersn}}
+    &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
+    {{#if admin}}
+        &nbsp;<button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
+    {{/if}}
+</div>
+
+<table class="table table-striped table-hover lapTable">
+    <thead>
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody {{bind-attr class=tbodyClass}}>
+    {{#each groupedResults}}
+        <tr>
+            <td colspan="11" class="group"><strong>Klasse {{group}}</strong></td>
+        </tr>
+        {{#each car in cars}}
+            <tr>
+                <td class="startnummer"><strong>{{car.position}})</strong></td>
+                <td class="startnummer"><strong>{{car.startnummer}}</strong></td>
+                <td>
+                    <strong>&#916; = {{car.delta}}&nbsp;s</strong>
+                </td>
+            </tr>
+        {{/each}}
+    {{/each}}
+    </tbody>
+</table>

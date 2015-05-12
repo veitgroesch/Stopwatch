@@ -4,9 +4,8 @@
         {{input type='password' value=password placeholder="Passwort"}}
     </div>
 
-    {{input type="text" placeholder='Gruppe filtern' value=filtersn}}
+    {{input type="text" placeholder='Klasse filtern' value=filtersn}}
     {{input type="text" placeholder='Lauf filtern' value=filterlauf}}
-    &nbsp;{{input type="checkbox" checked=tbodyLineBreak}} Zeilenumbruch
     &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
     {{#if admin}}
         &nbsp;<button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
@@ -82,6 +81,9 @@
                 </td>
                 <td>
                     <strong>{{{race.winnerPositionName}}}</strong>
+                    {{#if race.winnerDelta}}
+                        &nbsp({{race.winnerDelta}}&nbsp;s)
+                    {{/if}}
                 </td>
                 <td>
                     {{#if ../../admin}}

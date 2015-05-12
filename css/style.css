@@ -9,6 +9,12 @@
 
 /* Übersichtsseite */
 
+@media print {
+    #menu {
+        display: none;
+    }
+}
+
 #login {
     width: 220px;
     float: right;
