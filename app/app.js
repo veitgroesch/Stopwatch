@@ -3,6 +3,7 @@ App = Ember.Application.create({
     NUMBER_LAPS: 4,
     PASSWORD: 'cmd',
     LENGTH_COURSE: 2800, //Länge des Kurses
+    NUMBER_PICS: 3,  //Anzahl der Plätze mit Bild in der Siegerliste (-1 für alle)
     winnerlist: [],
     utils: {
         getWinnerList: function (filteredContent) {
@@ -26,13 +27,18 @@ App = Ember.Application.create({
                     }));
                 }
                 groupItem = result.findBy('group', group);
+                var filename = "";
+                if (position <= App.get('NUMBER_PICS') || App.get('NUMBER_PICS') === -1) {
+                    filename = "assets/pics/" + startnummer + ".jpg";
+                }
                 groupItem.get('cars').pushObject(Ember.Object.create({
                     startnummer: startnummer,
                     position: position,
                     delta: delta,
                     velocity: v,
                     car: carname,
-                    name: name
+                    name: name,
+                    filename: filename
                 }));
             });
             // Sortieren

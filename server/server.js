@@ -136,7 +136,6 @@ app.get('/api/laps/:id', function (req, res) {
 });
 
 app.get('/api/laps', function (req, res) {
-    var sql = "SELECT * FROM laps";
     var sql = "SELECT laps.id, laps.runde, laps.startnummer, laps.token, laps.nlauf, laps.laptime," +
         "laps.delta, laps.gueltig, laps.date, cars.name, cars.car " +
         "FROM laps INNER JOIN cars ON laps.startnummer=cars.startnummer;";
@@ -146,7 +145,6 @@ app.get('/api/laps', function (req, res) {
                 console.log('error: Database INSERT');
                 throw err;
             } else {
-                console.log(rows);
                 var laps = {'laps': rows};
                 res.status(httpStatus.OK).json(laps);
             }

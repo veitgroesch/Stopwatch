@@ -23,14 +23,14 @@
         {{/each}}
         <th>Delta</th>
         <th>Geschwindigkeit</th>
-        <th></th>
+        <th colspan="2">Gesamtwertung</th>
         <th></th>
     </tr>
     </thead>
     <tbody {{bind-attr class=tbodyClass}}>
     {{#each groupedResults}}
         <tr>
-            <td colspan="11" class="group"><strong>Klasse {{group}} - {{nameLauf}}</strong></td>
+            <td colspan="12" class="group"><strong>Klasse {{group}} - {{nameLauf}}</strong></td>
         </tr>
         {{#each race in races}}
             <tr>
@@ -82,8 +82,10 @@
                 </td>
                 <td>
                     <strong>{{{race.winnerPositionName}}}</strong>
+                </td>
+                <td>
                     {{#if race.winnerDelta}}
-                        &nbsp({{race.winnerDelta}}&nbsp;s)
+                        &#916;&nbsp=&nbsp{{race.winnerDelta}}&nbsp;s
                     {{/if}}
                 </td>
                 <td>
