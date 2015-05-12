@@ -6,6 +6,7 @@
 
     {{input type="text" placeholder='Klasse filtern' value=filtersn}}
     {{input type="text" placeholder='Lauf filtern' value=filterlauf}}
+    &nbsp;{{input type="checkbox" checked=tbodyLineBreak}} Zeilenumbruch
     &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
     {{#if admin}}
         &nbsp;<button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>

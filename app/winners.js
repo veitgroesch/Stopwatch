@@ -13,19 +13,20 @@ App.WinnersController = Ember.ArrayController.extend({
     sortProperties: ['group'],
     sortAscending: false,
 
+    changed: false,
 
     groupedResults: function () {
         return App.get('utils').getWinnerList(this.get('filteredContent'));
     }.property('filteredContent', 'admin'),
 
     filteredContent: function () {
-        this.set('toggled', false);
+        this.set('changed', false);
         var rxsn = new RegExp(this.get('filtersn'), 'gi');
         var laps = this.get('arrangedContent');
         return laps.filter(function (lap) {
             return lap.get('startnummer').substring(0, 1).match(rxsn);
         });
-    }.property('arrangedContent', 'filtersn', 'content.length'),
+    }.property('arrangedContent', 'filtersn', 'content.length', 'changed'),
 
     actions: {
         createCSV: function () {
@@ -74,6 +75,31 @@ App.WinnersRoute = Ember.Route.extend({
         return this.store.find('lap');
     },
     actions: {
+        refresh: function () {
+            var that = this;
+            this.set('model', this.store.find('lap'));
+            this.controller.set('changed', true);
+        },
+        changed: function (id) {
+            var that = this;
+            this.store.find('lap', id).then(function (lap) {
+                if (lap) {
+                    lap.reload().then(function () {
+                        that.controller.set('changed', true);
+                    });
+                }
+            });
+        },
+        deleted: function (id) {
+            var that = this;
+            this.store.find('lap', id).then(function (lap) {
+                if (lap) {
+                    lap.deleteRecord();
+                }
+            }).then(function () {
+                that.controller.set('changed', true);
+            });
+        },
         didTransition: function (transition, originRoute) {
             this.controller.set('filtersn', '');
             return true;

@@ -1,4 +1,5 @@
 var routes = require('./routers/routes.js');
+var getcar = require('./getcar.js');
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -46,8 +47,9 @@ app.use(bodyParser.urlencoded({
 
 app.post('/api/laps', function (req, res) {
     var data = req.body;
+    var startnummer = data.lap.startnummer;
     var sql = "INSERT INTO laps (startnummer, token, runde, nlauf, laptime, delta, date) VALUES ('" +
-        data.lap.startnummer +
+        startnummer +
         "', '" + data.lap.token +
         "', '" + data.lap.runde +
         "', '" + data.lap.nlauf +
@@ -66,7 +68,27 @@ app.post('/api/laps', function (req, res) {
                 res.status(httpStatus.CREATED).json(data);
             }
         });
-
+    var sql = "Select * from cars where `startnummer`=" + startnummer;
+    connection.query(sql,
+        function (err, rows, fields) {
+            if (err) {
+                console.log('error: Database Select');
+                throw err;
+            } else {
+                if (rows.length == 0) {
+                    var sql = "INSERT INTO cars (startnummer, name, car) VALUES ('" +
+                        startnummer +
+                        "', 'NN', 'NN')";
+                    connection.query(sql,
+                        function (err, rows, fields) {
+                            if (err) {
+                                console.log('error: Database INSERT');
+                                throw err;
+                            }
+                        });
+                }
+            }
+        });
 });
 
 app.put('/api/laps/:id', function (req, res) {
@@ -104,7 +126,7 @@ app.get('/api/laps/:id', function (req, res) {
     connection.query(sql,
         function (err, rows, fields) {
             if (err) {
-                console.log('error: Database INSERT');
+                console.log('error: Database Select');
                 throw err;
             } else {
                 var laps = {'laps': rows[0]};
@@ -115,12 +137,16 @@ app.get('/api/laps/:id', function (req, res) {
 
 app.get('/api/laps', function (req, res) {
     var sql = "SELECT * FROM laps";
+    var sql = "SELECT laps.id, laps.runde, laps.startnummer, laps.token, laps.nlauf, laps.laptime," +
+        "laps.delta, laps.gueltig, laps.date, cars.name, cars.car " +
+        "FROM laps INNER JOIN cars ON laps.startnummer=cars.startnummer;";
     connection.query(sql,
         function (err, rows, fields) {
             if (err) {
                 console.log('error: Database INSERT');
                 throw err;
             } else {
+                console.log(rows);
                 var laps = {'laps': rows};
                 res.status(httpStatus.OK).json(laps);
             }

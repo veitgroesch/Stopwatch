@@ -15,6 +15,8 @@ App = Ember.Application.create({
                 var position = car.get('winnerPosition');
                 var delta = car.get('delta');
                 var v = car.get('velocity');
+                var carname = car.get('car');
+                var name = car.get('name');
                 var groupItem = result.findBy('group', group);
                 var hasGroup = !!groupItem;
                 if (!hasGroup) {
@@ -28,7 +30,9 @@ App = Ember.Application.create({
                     startnummer: startnummer,
                     position: position,
                     delta: delta,
-                    velocity: v
+                    velocity: v,
+                    car: carname,
+                    name: name
                 }));
             });
             // Sortieren
@@ -50,6 +54,8 @@ App = Ember.Application.create({
                 var date = item.get('date');
                 var token = item.get('token');
                 var nlauf = item.get('nlauf');
+                var name = item.get('name');
+                var car = item.get('car');
                 var group = startnummer.substring(0, 1);
                 // collect groups in groups-array
                 if (!groups.findBy('group', group)) {
@@ -84,6 +90,8 @@ App = Ember.Application.create({
                         winnerPositionName: "",
                         winnerDelta: "",
                         meanDelta: "",
+                        name: name,
+                        car: car,
                         laps: []
                     }));
                 }
@@ -137,6 +145,8 @@ App = Ember.Application.create({
                                 startnummer: race.get('startnummer'),
                                 nlauf: race.get('nlauf'),
                                 delta: 0,
+                                name: race.get('name'),
+                                car: race.get('car'),
                                 velocity: race.get('velocity'),
                                 winnerPosition: 0,
                                 sumDelta: race.get('meanDelta'),
@@ -304,8 +314,9 @@ App.Lap = DS.Model.extend({
     nlauf: DS.attr(),
     gueltig: DS.attr(),
     laptime: DS.attr(),
-    setzrunde: DS.attr(),
     delta: DS.attr(),
+    name: DS.attr(),
+    car: DS.attr(),
     date: DS.attr()
 });
 
