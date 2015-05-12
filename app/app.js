@@ -4,6 +4,20 @@ App = Ember.Application.create({
     PASSWORD: 'cmd',
     LENGTH_COURSE: 2800, //Länge des Kurses
     utils: {
+        nameWinnerPosition: function (pos) {
+            switch (pos) {
+                case 0:
+                    return "";
+                case 1:
+                    return "&star;&star;&star;";
+                case 2:
+                    return "&star;&star;";
+                case 3:
+                    return "&star;";
+                default:
+                    return pos + ". Platz";
+            }
+        },
         nameLauf: function (nlauf) {
             if (nlauf === 0) {
                 return "Trainingslauf";

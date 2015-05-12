@@ -4,8 +4,8 @@ App.LapsController = Ember.ArrayController.extend({
         return this.get('password') === App.get('PASSWORD');
     }.property('password'),
 
-    tbodyClass: function() {
-        return this.get('tbodyLargeFont')? "tbodyLarge" : "tbodySmall";
+    tbodyClass: function () {
+        return this.get('tbodyLargeFont') ? "tbodyLarge" : "tbodySmall";
     }.property('tbodyLargeFont'),
     tbodyLargeFont: true,
     tbodyLineBreak: true,
@@ -29,6 +29,8 @@ App.LapsController = Ember.ArrayController.extend({
 
     groupedResults: function () {
         var result = [];
+        var siegerliste = [];
+        var groups = [];
         var that = this;
         this.get('filteredContent').forEach(function (item) {
             // for the checkboxes
@@ -39,6 +41,12 @@ App.LapsController = Ember.ArrayController.extend({
             var token = item.get('token');
             var nlauf = item.get('nlauf');
             var group = startnummer.substring(0, 1);
+            // collect groups in groups-array
+            if (!groups.findBy('group', group)) {
+                groups.pushObject(Ember.Object.create({
+                    group: group
+                }));
+            }
             var filteredResult = result.filterBy('nlauf', nlauf);
             var groupItem = filteredResult.findBy('group', group);
             var hasGroup = !!groupItem;
@@ -60,6 +68,10 @@ App.LapsController = Ember.ArrayController.extend({
                 result.filterBy('nlauf', nlauf).findBy('group', group).get('races').pushObject(Ember.Object.create({
                     token: token,
                     startnummer: startnummer,
+                    nlauf: nlauf,
+                    group: group,
+                    winnerPosition: 0,
+                    winnerPositionName: "",
                     meanDelta: "",
                     laps: []
                 }));
@@ -67,8 +79,8 @@ App.LapsController = Ember.ArrayController.extend({
             result.filterBy('nlauf', nlauf).findBy('group', group).get('races').findBy('token', token).get('laps').pushObject(item);
         });
         // Deltas berechnen
-        result.forEach(function (group) {
-            group.get('races').forEach(function (race) {
+        result.forEach(function (groupItem) {
+            groupItem.get('races').forEach(function (race) {
                 var meanDelta = 0;
                 // number of deltas to count
                 var n = 0;
@@ -104,17 +116,66 @@ App.LapsController = Ember.ArrayController.extend({
                         runde: 'auf der Piste'
                     }));
                 }
+                // add race to siegerliste
+                if (race.get('nlauf') > 0) {
+                    var siegerItem = siegerliste.findBy('startnummer', race.get('startnummer'));
+                    var hasSiegerItem = !!siegerItem;
+                    if (!hasSiegerItem) {
+                        siegerliste.pushObject(Ember.Object.create({
+                            group: groupItem.get('group'),
+                            startnummer: race.get('startnummer'),
+                            nlauf: race.get('nlauf'),
+                            delta: 0,
+                            winnerPosition: 0,
+                            sumDelta: race.get('meanDelta'),
+                            nDelta: 1
+                        }));
+                    } else {
+                        siegerItem.set('sumDelta', siegerItem.get('sumDelta') + race.get('meanDelta'));
+                        siegerItem.set('nDelta', siegerItem.get('nDelta') + 1);
+                    }
+                }
             });
             // Nach Deltas sortieren
-            group.set('races', group.get('races').sortBy('meanDelta'));
+            groupItem.set('races', groupItem.get('races').sortBy('meanDelta'));
 
             // set positions to race array
             var position = 0;
-            group.get('races').forEach(function(race) {
+            groupItem.get('races').forEach(function (race) {
                 position++;
                 race.position = position;
             });
         });
+        // Siegerliste: Deltas berechnen über alle Wertungsläufe
+        siegerliste.forEach(function (car) {
+            if (car.get('nDelta') > 0) {
+                var delta = Math.round(car.get('sumDelta') / car.get('nDelta') * 10) / 10;
+                car.set('delta', delta);
+            }
+        });
+        groups.forEach(function (groupItem) {
+            var group = groupItem.get('group');
+            var races = siegerliste.filterBy('group', group);
+            var sortedRaces = races.sortBy('delta');
+            var pos = 0;
+            sortedRaces.forEach(function (race) {
+                pos++;
+                race.set('winnerPosition', pos);
+            });
+        });
+        console.log('siegerliste', siegerliste);
+        result.forEach(function (item) {
+            item.get('races').forEach(function (car) {
+                var siegerItem = siegerliste.findBy('startnummer', car.get('startnummer'));
+                if (siegerItem) {
+                    var winnerPosition = siegerItem.get('winnerPosition');
+                    car.set('winnerPosition', winnerPosition);
+                    car.set('winnerPositionName', App.get('utils').nameWinnerPosition(winnerPosition));
+
+                }
+            });
+        });
+        // Nach token (Zeit) sortieren - neueste Rennen zuerst
         result = result.sortBy('token').reverse();
         return result;
     }.property('filteredContent', 'admin'),

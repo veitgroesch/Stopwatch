@@ -19,7 +19,7 @@ App.WatchesRoute = Ember.Route.extend({
 App.WatchesController = Ember.ArrayController.extend({
     dataDeleted: false,
     laeufe: [
-        {name: "Traindinglauf", id: 0},
+        {name: "Trainingslauf", id: 0},
         {name: "1.Wertungslauf", id: 1},
         {name: "2.Wertungslauf", id: 2},
         {name: "3.Wertungslauf", id: 3},
