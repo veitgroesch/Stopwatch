@@ -22,12 +22,13 @@
         <th></th>
         <th></th>
         <th></th>
+        <th></th>
     </tr>
     </thead>
     <tbody {{bind-attr class=tbodyClass}}>
     {{#each groupedResults}}
         <tr>
-            <td colspan="7" class="group"><strong>Klasse {{group}}</strong></td>
+            <td colspan="8" class="group"><strong>Klasse {{group}}</strong></td>
         </tr>
         {{#each car in cars}}
             <tr>
@@ -35,6 +36,7 @@
                 <td class="startnummer"><strong>{{car.startnummer}}</strong></td>
                 <td class="startnummer"><strong>{{car.name}}</strong></td>
                 <td class="startnummer"><strong>{{car.car}}</strong></td>
+                <td class="startnummer"><strong>{{car.year}}</strong></td>
                 <td>
                     <strong>&#916; = {{car.delta}}&nbsp;s</strong>
                 </td>

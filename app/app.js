@@ -18,6 +18,7 @@ App = Ember.Application.create({
                 var v = car.get('velocity');
                 var carname = car.get('car');
                 var name = car.get('name');
+                var year = car.get('year');
                 var groupItem = result.findBy('group', group);
                 var hasGroup = !!groupItem;
                 if (!hasGroup) {
@@ -38,6 +39,7 @@ App = Ember.Application.create({
                     velocity: v,
                     car: carname,
                     name: name,
+                    year: year,
                     filename: filename
                 }));
             });
@@ -61,6 +63,7 @@ App = Ember.Application.create({
                 var token = item.get('token');
                 var nlauf = item.get('nlauf');
                 var name = item.get('name');
+                var year = item.get('year');
                 var car = item.get('car');
                 var group = startnummer.substring(0, 1);
                 // collect groups in groups-array
@@ -97,6 +100,7 @@ App = Ember.Application.create({
                         winnerDelta: "",
                         meanDelta: "",
                         name: name,
+                        year: year,
                         car: car,
                         laps: []
                     }));
@@ -153,6 +157,7 @@ App = Ember.Application.create({
                                 delta: 0,
                                 name: race.get('name'),
                                 car: race.get('car'),
+                                year: race.get('year'),
                                 velocity: race.get('velocity'),
                                 winnerPosition: 0,
                                 sumDelta: race.get('meanDelta'),
@@ -323,6 +328,7 @@ App.Lap = DS.Model.extend({
     delta: DS.attr(),
     name: DS.attr(),
     car: DS.attr(),
+    year: DS.attr(),
     date: DS.attr()
 });
 

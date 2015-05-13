@@ -1,5 +1,4 @@
 var routes = require('./routers/routes.js');
-var getcar = require('./getcar.js');
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -76,9 +75,8 @@ app.post('/api/laps', function (req, res) {
                 throw err;
             } else {
                 if (rows.length == 0) {
-                    var sql = "INSERT INTO cars (startnummer, name, car) VALUES ('" +
-                        startnummer +
-                        "', 'NN', 'NN')";
+                    var sql = "INSERT INTO cars (startnummer, year, name, car) VALUES ('" +
+                        startnummer + "', 'NN', 'NN', 'NN')";
                     connection.query(sql,
                         function (err, rows, fields) {
                             if (err) {
@@ -137,7 +135,7 @@ app.get('/api/laps/:id', function (req, res) {
 
 app.get('/api/laps', function (req, res) {
     var sql = "SELECT laps.id, laps.runde, laps.startnummer, laps.token, laps.nlauf, laps.laptime," +
-        "laps.delta, laps.gueltig, laps.date, cars.name, cars.car " +
+        "laps.delta, laps.gueltig, laps.date, cars.year, cars.name, cars.car " +
         "FROM laps INNER JOIN cars ON laps.startnummer=cars.startnummer;";
     connection.query(sql,
         function (err, rows, fields) {
